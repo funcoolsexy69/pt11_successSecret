@@ -13,6 +13,7 @@
         table {
             border-collapse: collapse;
             width: 100%;
+            table-layout: fixed; /* 테이블 레이아웃 고정 */
             background-color: pink;
         }
 
@@ -29,6 +30,7 @@
 
         th:first-child, td:first-child {
             text-align: left;
+            width: 80px; /* 첫 번째 열 너비 조정 */
         }
 
         td[contenteditable="true"]:focus {
