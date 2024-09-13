@@ -65,7 +65,7 @@
             for (var hour = 0; hour < 24; hour++) {
                 var row = document.createElement("tr");
                 var timeCell = document.createElement("td");
-                timeCell.textContent = ('0' + hour).slice(-2) + "시 ~ " + ('0' + (hour + 1)).slice(-2) + "시";
+                timeCell.textContent = ('0' + hour).slice(-2) + "-" + ('0' + (hour + 1)).slice(-2) + "시";
                 row.appendChild(timeCell);
 
                 for (var day = 0; day < 7; day++) {
