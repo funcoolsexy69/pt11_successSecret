@@ -61,7 +61,7 @@
         .pinned-item button:hover { opacity: 0.8; }
         .calendar-picker { position: absolute; top: 60px; left: 50%; transform: translateX(-50%); background: white; border: 1px solid #e0e0e0; padding: 10px; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .calendar-header button { background: none; border: none; cursor: pointer; font-size: 16px; }
+        .calendar-header button { background: none; border: none; cursor: pointer; font-size: 16px; color: #e83e8c; }
         .days-grid { display: grid; grid-template-columns: repeat(7, 30px); gap: 5px; justify-content: center; }
         .day-cell { text-align: center; padding: 5px; cursor: pointer; }
         .day-cell:hover { background: #f0f0f0; }
@@ -173,17 +173,25 @@
             // Header
             const header = document.createElement('div');
             header.className = 'calendar-header';
-            const prev = document.createElement('button');
-            prev.textContent = '<';
-            prev.onclick = () => changeMonth(-1);
+            const prevYear = document.createElement('button');
+            prevYear.textContent = '<<';
+            prevYear.onclick = () => changeYear(-1);
+            const prevMonth = document.createElement('button');
+            prevMonth.textContent = '<';
+            prevMonth.onclick = () => changeMonth(-1);
             const monthTitle = document.createElement('span');
             monthTitle.textContent = pickerDate.toLocaleString('default', { month: 'long', year: 'numeric' });
-            const next = document.createElement('button');
-            next.textContent = '>';
-            next.onclick = () => changeMonth(1);
-            header.appendChild(prev);
+            const nextMonth = document.createElement('button');
+            nextMonth.textContent = '>';
+            nextMonth.onclick = () => changeMonth(1);
+            const nextYear = document.createElement('button');
+            nextYear.textContent = '>>';
+            nextYear.onclick = () => changeYear(1);
+            header.appendChild(prevYear);
+            header.appendChild(prevMonth);
             header.appendChild(monthTitle);
-            header.appendChild(next);
+            header.appendChild(nextMonth);
+            header.appendChild(nextYear);
             picker.appendChild(header);
 
             // Weekdays
@@ -228,6 +236,11 @@
 
         function changeMonth(delta) {
             pickerDate.setMonth(pickerDate.getMonth() + delta);
+            renderMonthCalendar();
+        }
+
+        function changeYear(delta) {
+            pickerDate.setFullYear(pickerDate.getFullYear() + delta);
             renderMonthCalendar();
         }
 
