@@ -135,6 +135,9 @@
 
                     // Handle arrow key navigation
                     cell.addEventListener("keydown", function(e) {
+                        if (e.isComposing) {
+                            return;
+                        }
                         const hour = parseInt(this.dataset.hour);
                         const day = parseInt(this.dataset.day);
                         let targetCell = null;
