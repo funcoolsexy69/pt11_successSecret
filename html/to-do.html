@@ -353,18 +353,6 @@
         .tasks li {
             margin-bottom: 10px;
         }
-        .save-button {
-            padding: 8px 15px;
-            background-color: #e83e8c;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-family: sans-serif;
-        }
-        .save-button:hover {
-            background-color: #c2255c;
-        }
     </style>
 </head>
 <body>
@@ -393,14 +381,12 @@
                 <ul class="tasks">
                     <li><textarea id="task1" placeholder="Handle immediately"></textarea></li>
                 </ul>
-                <button class="save-button" onclick="savePriority('task1')">Save</button>
             </div>
             <div class="quadrant">
                 <h2>2. Important & Not Urgent</h2>
                 <ul class="tasks">
                     <li><textarea id="task2" placeholder="Set a deadline and complete as soon as possible"></textarea></li>
                 </ul>
-                <button class="save-button" onclick="savePriority('task2')">Save</button>
             </div>
         </div>
         <div class="priority-container">
@@ -409,14 +395,12 @@
                 <ul class="tasks">
                     <li><textarea id="task3" placeholder="Reduce or delegate"></textarea></li>
                 </ul>
-                <button class="save-button" onclick="savePriority('task3')">Save</button>
             </div>
             <div class="quadrant">
                 <h2>4. Not Urgent & Not Important</h2>
                 <ul class="tasks">
                     <li><textarea id="task4" placeholder="Cancel or postpone"></textarea></li>
                 </ul>
-                <button class="save-button" onclick="savePriority('task4')">Save</button>
             </div>
         </div>
     </div>
@@ -920,7 +904,7 @@
             if (direction === 'up' && index > 0) {
                 [currentTodos[index - 1], currentTodos[index]] = [currentTodos[index], currentTodos[index - 1]];
             } else if (direction === 'down' && index < currentTodos.length - 1) {
-                [currentTodos[index], currentRoutines[index + 1]] = [currentTodos[index + 1], currentTodos[index]];
+                [currentTodos[index], currentTodos[index + 1]] = [currentTodos[index + 1], currentTodos[index]];
             }
             todos[dateKey()] = currentTodos;
             localStorage.setItem('todos', JSON.stringify(todos));
@@ -965,7 +949,6 @@
             currentTasks[taskId] = taskText;
             priorityTasks[dateKey()] = currentTasks;
             localStorage.setItem('priorityTasks', JSON.stringify(priorityTasks));
-            alert("Saved!");
         }
 
         function loadPriority() {
