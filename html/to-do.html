@@ -129,6 +129,9 @@
         .routine button.delete {
             background: red;
         }
+        .routine button.next {
+            background: #28a745;
+        }
         .routine button:hover {
             opacity: 0.8;
         }
@@ -185,6 +188,13 @@
         .down-button {
             margin-right: 5px;
         }
+        .next-button {
+            margin-right: 5px;
+            background-color: #28a745;
+        }
+        .next-button:hover {
+            background-color: #218838;
+        }
         .todos-add-form {
             display: flex;
             flex-wrap: wrap;
@@ -211,6 +221,9 @@
         }
         .pinned-item button.delete {
             background: red;
+        }
+        .pinned-item button.next {
+            background: #28a745;
         }
         .pinned-item button:hover {
             opacity: 0.8;
@@ -578,6 +591,12 @@
         let pickerDate;
         const dateKey = () => currentDate.toISOString().split('T')[0];
 
+        function getNextDateKey() {
+            const nextDate = new Date(currentDate);
+            nextDate.setDate(currentDate.getDate() + 1);
+            return nextDate.toISOString().split('T')[0];
+        }
+
         function updateDateDisplay() {
             const month = currentDate.toLocaleString('default', { month: 'short' });
             document.getElementById('currentDate').textContent = `${month} ${currentDate.getFullYear()} ▼`;
@@ -731,6 +750,7 @@
                     <button class="delete" onclick="deletePinned(${index})">Delete</button>
                     <button onclick="movePinned(${index}, 'up')">Up</button>
                     <button onclick="movePinned(${index}, 'down')">Down</button>
+                    <button class="next" onclick="copyPinnedToNextDay(${index})">Next</button>
                 `;
                 list.appendChild(div);
             });
@@ -785,6 +805,18 @@
             loadPinned();
         }
 
+        function copyPinnedToNextDay(index) {
+            const pinned = JSON.parse(localStorage.getItem('pinned') || '{}');
+            const currentPinned = pinned[dateKey()] || [];
+            const nextDateKey = getNextDateKey();
+            const nextPinned = pinned[nextDateKey] || [];
+            const pin = currentPinned[index];
+            nextPinned.push({ emoji: pin.emoji, text: pin.text });
+            pinned[nextDateKey] = nextPinned;
+            localStorage.setItem('pinned', JSON.stringify(pinned));
+            alert(`Pinned item "${pin.text}" copied to ${nextDateKey}`);
+        }
+
         function loadRoutines() {
             const routines = JSON.parse(localStorage.getItem('routines') || '{}');
             const currentRoutines = routines[dateKey()] || [];
@@ -802,6 +834,7 @@
                     <button class="delete" onclick="deleteRoutine(${index})">Delete</button>
                     <button onclick="moveRoutine(${index}, 'up')">Up</button>
                     <button onclick="moveRoutine(${index}, 'down')">Down</button>
+                    <button class="next" onclick="copyRoutineToNextDay(${index})">Next</button>
                 `;
                 list.appendChild(div);
             });
@@ -884,6 +917,18 @@
             routinesList.scrollTop = scrollPosition;
         }
 
+        function copyRoutineToNextDay(index) {
+            const routines = JSON.parse(localStorage.getItem('routines') || '{}');
+            const currentRoutines = routines[dateKey()] || [];
+            const nextDateKey = getNextDateKey();
+            const nextRoutines = routines[nextDateKey] || [];
+            const routine = currentRoutines[index];
+            nextRoutines.push({ time: routine.time, emoji: routine.emoji, text: routine.text, checked: false });
+            routines[nextDateKey] = nextRoutines;
+            localStorage.setItem('routines', JSON.stringify(routines));
+            alert(`Routine "${routine.text}" copied to ${nextDateKey}`);
+        }
+
         function loadTodos() {
             const todos = JSON.parse(localStorage.getItem('todos') || '{}');
             const currentTodos = todos[dateKey()] || [];
@@ -904,6 +949,7 @@
                     <button class="delete-button" onclick="deleteTodo(${index})">Delete</button>
                     <button class="up-button" onclick="moveTodo(${index}, 'up')">Up</button>
                     <button class="down-button" onclick="moveTodo(${index}, 'down')">Down</button>
+                    <button class="next-button" onclick="copyTodoToNextDay(${index})">Next</button>
                 `;
                 todosBody.appendChild(div);
                 if (todo.isNew) {
@@ -992,6 +1038,27 @@
             todos[dateKey()] = currentTodos;
             localStorage.setItem('todos', JSON.stringify(todos));
             loadTodos();
+        }
+
+        function copyTodoToNextDay(index) {
+            const todos = JSON.parse(localStorage.getItem('todos') || '{}');
+            const currentTodos = todos[dateKey()] || [];
+            const nextDateKey = getNextDateKey();
+            const nextTodos = todos[nextDateKey] || [];
+            const todo = currentTodos[index];
+            nextTodos.push({
+                importance: todo.importance,
+                priority: todo.priority,
+                task: todo.task,
+                estimatedTime: todo.estimatedTime,
+                startTime: todo.startTime,
+                deadline: todo.deadline,
+                checked: false,
+                isNew: true
+            });
+            todos[nextDateKey] = nextTodos;
+            localStorage.setItem('todos', JSON.stringify(todos));
+            alert(`Todo "${todo.task}" copied to ${nextDateKey}`);
         }
 
         function saveReflections() {
