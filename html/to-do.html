@@ -368,6 +368,9 @@
         .priority textarea:focus {
             outline: 4px solid #c2255c;
         }
+        .quadrant .next-button {
+            margin-top: 10px;
+        }
         /* Bucket List styles */
         #bucketlistSection {
             margin: 10px;
@@ -419,6 +422,9 @@
         .bucketlist-item textarea:focus {
             outline: 4px solid #c2255c;
         }
+        .bucketlist-item .next-button {
+            margin-top: 10px;
+        }
         /* To-do styles */
         .todo-item {
             padding: 10px;
@@ -469,12 +475,14 @@
                 <h2>1. Urgent & Important</h2>
                 <ul class="tasks">
                     <li><textarea id="task1" placeholder="Handle immediately"></textarea></li>
+                    <li><button class="next-button" onclick="copyTask1ToNextDay()">Next</button></li>
                 </ul>
             </div>
             <div class="quadrant">
                 <h2>2. Important & Not Urgent</h2>
                 <ul class="tasks">
                     <li><textarea id="task2" placeholder="Set a deadline and complete as soon as possible"></textarea></li>
+                    <li><button class="next-button" onclick="copyTask2ToNextDay()">Next</button></li>
                 </ul>
             </div>
         </div>
@@ -483,12 +491,14 @@
                 <h2>3. Urgent & Not Important</h2>
                 <ul class="tasks">
                     <li><textarea id="task3" placeholder="Reduce or delegate"></textarea></li>
+                    <li><button class="next-button" onclick="copyTask3ToNextDay()">Next</button></li>
                 </ul>
             </div>
             <div class="quadrant">
                 <h2>4. Not Urgent & Not Important</h2>
                 <ul class="tasks">
                     <li><textarea id="task4" placeholder="Cancel or postpone"></textarea></li>
+                    <li><button class="next-button" onclick="copyTask4ToNextDay()">Next</button></li>
                 </ul>
             </div>
         </div>
@@ -563,18 +573,21 @@
                 <input type="text" id="title_bucket1" placeholder="Title">
                 <input type="text" id="deadline_bucket1" placeholder="Deadline">
                 <textarea id="description_bucket1" placeholder="Description"></textarea>
+                <button class="next-button" onclick="copyBucket1ToNextDay()">Next</button>
             </div>
             <div class="bucketlist-item">
                 <h2>Bucket List Item 2</h2>
                 <input type="text" id="title_bucket2" placeholder="Title">
                 <input type="text" id="deadline_bucket2" placeholder="Deadline">
                 <textarea id="description_bucket2" placeholder="Description"></textarea>
+                <button class="next-button" onclick="copyBucket2ToNextDay()">Next</button>
             </div>
             <div class="bucketlist-item">
                 <h2>Bucket List Item 3</h2>
                 <input type="text" id="title_bucket3" placeholder="Title">
                 <input type="text" id="deadline_bucket3" placeholder="Deadline">
                 <textarea id="description_bucket3" placeholder="Description"></textarea>
+                <button class="next-button" onclick="copyBucket3ToNextDay()">Next</button>
             </div>
         </div>
     </div>
@@ -1110,6 +1123,50 @@
             document.getElementById('task4').value = currentTasks.task4 || '';
         }
 
+        function copyTask1ToNextDay() {
+            const priorityTasks = JSON.parse(localStorage.getItem('priorityTasks') || '{}');
+            const currentTasks = priorityTasks[dateKey()] || {};
+            const nextDateKey = getNextDateKey();
+            const nextTasks = priorityTasks[nextDateKey] || {};
+            nextTasks.task1 = document.getElementById('task1').value;
+            priorityTasks[nextDateKey] = nextTasks;
+            localStorage.setItem('priorityTasks', JSON.stringify(priorityTasks));
+            alert(`Priority 1 copied to ${nextDateKey}`);
+        }
+
+        function copyTask2ToNextDay() {
+            const priorityTasks = JSON.parse(localStorage.getItem('priorityTasks') || '{}');
+            const currentTasks = priorityTasks[dateKey()] || {};
+            const nextDateKey = getNextDateKey();
+            const nextTasks = priorityTasks[nextDateKey] || {};
+            nextTasks.task2 = document.getElementById('task2').value;
+            priorityTasks[nextDateKey] = nextTasks;
+            localStorage.setItem('priorityTasks', JSON.stringify(priorityTasks));
+            alert(`Priority 2 copied to ${nextDateKey}`);
+        }
+
+        function copyTask3ToNextDay() {
+            const priorityTasks = JSON.parse(localStorage.getItem('priorityTasks') || '{}');
+            const currentTasks = priorityTasks[dateKey()] || {};
+            const nextDateKey = getNextDateKey();
+            const nextTasks = priorityTasks[nextDateKey] || {};
+            nextTasks.task3 = document.getElementById('task3').value;
+            priorityTasks[nextDateKey] = nextTasks;
+            localStorage.setItem('priorityTasks', JSON.stringify(priorityTasks));
+            alert(`Priority 3 copied to ${nextDateKey}`);
+        }
+
+        function copyTask4ToNextDay() {
+            const priorityTasks = JSON.parse(localStorage.getItem('priorityTasks') || '{}');
+            const currentTasks = priorityTasks[dateKey()] || {};
+            const nextDateKey = getNextDateKey();
+            const nextTasks = priorityTasks[nextDateKey] || {};
+            nextTasks.task4 = document.getElementById('task4').value;
+            priorityTasks[nextDateKey] = nextTasks;
+            localStorage.setItem('priorityTasks', JSON.stringify(priorityTasks));
+            alert(`Priority 4 copied to ${nextDateKey}`);
+        }
+
         function saveBucketList() {
             const data = {
                 title_bucket1: document.getElementById('title_bucket1').value,
@@ -1139,6 +1196,45 @@
             document.getElementById('title_bucket3').value = data.title_bucket3 || '';
             document.getElementById('deadline_bucket3').value = data.deadline_bucket3 || '';
             document.getElementById('description_bucket3').value = data.description_bucket3 || '';
+        }
+
+        function copyBucket1ToNextDay() {
+            const bucketlist = JSON.parse(localStorage.getItem('bucketlist') || '{}');
+            const currentData = bucketlist[dateKey()] || {};
+            const nextDateKey = getNextDateKey();
+            const nextData = bucketlist[nextDateKey] || {};
+            nextData.title_bucket1 = document.getElementById('title_bucket1').value;
+            nextData.deadline_bucket1 = document.getElementById('deadline_bucket1').value;
+            nextData.description_bucket1 = document.getElementById('description_bucket1').value;
+            bucketlist[nextDateKey] = nextData;
+            localStorage.setItem('bucketlist', JSON.stringify(bucketlist));
+            alert(`Bucket List Item 1 copied to ${nextDateKey}`);
+        }
+
+        function copyBucket2ToNextDay() {
+            const bucketlist = JSON.parse(localStorage.getItem('bucketlist') || '{}');
+            const currentData = bucketlist[dateKey()] || {};
+            const nextDateKey = getNextDateKey();
+            const nextData = bucketlist[nextDateKey] || {};
+            nextData.title_bucket2 = document.getElementById('title_bucket2').value;
+            nextData.deadline_bucket2 = document.getElementById('deadline_bucket2').value;
+            nextData.description_bucket2 = document.getElementById('description_bucket2').value;
+            bucketlist[nextDateKey] = nextData;
+            localStorage.setItem('bucketlist', JSON.stringify(bucketlist));
+            alert(`Bucket List Item 2 copied to ${nextDateKey}`);
+        }
+
+        function copyBucket3ToNextDay() {
+            const bucketlist = JSON.parse(localStorage.getItem('bucketlist') || '{}');
+            const currentData = bucketlist[dateKey()] || {};
+            const nextDateKey = getNextDateKey();
+            const nextData = bucketlist[nextDateKey] || {};
+            nextData.title_bucket3 = document.getElementById('title_bucket3').value;
+            nextData.deadline_bucket3 = document.getElementById('deadline_bucket3').value;
+            nextData.description_bucket3 = document.getElementById('description_bucket3').value;
+            bucketlist[nextDateKey] = nextData;
+            localStorage.setItem('bucketlist', JSON.stringify(bucketlist));
+            alert(`Bucket List Item 3 copied to ${nextDateKey}`);
         }
 
         // Initial setup
