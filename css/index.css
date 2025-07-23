@@ -113,6 +113,29 @@ body {
   	-webkit-text-stroke-width: 1px;
 }
 
+.message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 80px;
+    font-weight: bold;
+    color: white;
+    z-index: 1;
+    -webkit-text-stroke-color: black;
+    -webkit-text-stroke-width: 0.5px;
+    position: absolute; /* 절대 위치로 설정하여 다른 요소에 영향을 받지 않도록 합니다. */
+    top: 50%; /* 슬라이드 쇼의 세로 중앙에 위치하기 위해 50%로 설정합니다. */
+    left: 50%; /* 슬라이드 쇼의 가로 중앙에 위치하기 위해 50%로 설정합니다. */
+    transform: translate(-50%, -50%); /* 슬라이드 쇼의 중앙으로 메시지를 이동시킵니다. */
+    font-size: 80px; /* 메시지의 글자 크기를 설정합니다. */
+    font-weight: bold; /* 메시지의 글자 굵기를 설정합니다. */
+    color: white; /* 메시지의 글자 색상을 설정합니다. */
+    z-index: 1; /* 슬라이드 쇼 위에 메시지를 배치합니다. */
+     -webkit-text-stroke-color: black;
+  	-webkit-text-stroke-width: 0.5px; 
+}
+
 #slide {
     display: flex;
     justify-content: center;
