@@ -97,6 +97,27 @@
             align-items: center;
             gap: 10px;
         }
+        .routine.red {
+            background-color: rgba(255, 160, 180, 0.4); /* More saturated pastel red */
+        }
+        .routine.orange {
+            background-color: rgba(255, 180, 100, 0.4); /* More saturated pastel orange */
+        }
+        .routine.yellow {
+            background-color: rgba(255, 230, 100, 0.4); /* More saturated pastel yellow */
+        }
+        .routine.green {
+            background-color: rgba(150, 255, 150, 0.4); /* More saturated pastel green */
+        }
+        .routine.blue {
+            background-color: rgba(100, 200, 255, 0.4); /* More saturated pastel blue */
+        }
+        .routine.indigo {
+            background-color: rgba(150, 150, 255, 0.4); /* More saturated pastel indigo */
+        }
+        .routine.violet {
+            background-color: rgba(200, 150, 255, 0.4); /* More saturated pastel violet */
+        }
         .routine button {
             background: #e83e8c;
             color: white;
@@ -385,6 +406,28 @@
         .bucketlist-item textarea:focus {
             outline: 4px solid #c2255c;
         }
+        /* To-do styles */
+        .todo-item {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background-color: #f7d9e8; /* Default background */
+        }
+        .todo-item.new {
+            background: linear-gradient(90deg, rgba(255, 160, 180, 0.4), rgba(255, 180, 100, 0.4), rgba(255, 230, 100, 0.4), rgba(150, 255, 150, 0.4), rgba(100, 200, 255, 0.4), rgba(150, 150, 255, 0.4), rgba(200, 150, 255, 0.4));
+            animation: fadeToNormal 3s forwards;
+        }
+        @keyframes fadeToNormal {
+            to {
+                background: #f7d9e8;
+            }
+        }
+        .todo-item.completed {
+            background-color: #e0e0e0;
+        }
     </style>
 </head>
 <body>
@@ -448,15 +491,7 @@
     </div>
     <div id="todosSection" class="hidden">
         <div class="todos">
-            <table id="taskList">
-                <thead>
-                    <tr>
-                        <th>Importance - Priority - Task - Estimated Time - Start Time - Deadline</th>
-                        <th>Edit Delete Up Down</th>
-                    </tr>
-                </thead>
-                <tbody id="todosBody"></tbody>
-            </table>
+            <div id="todosBody"></div>
         </div>
         <div class="todos-add-form">
             <input id="newImportance" placeholder="Importance">
@@ -755,9 +790,11 @@
             const currentRoutines = routines[dateKey()] || [];
             const list = document.getElementById('routinesList');
             list.innerHTML = '';
+            const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet'];
             currentRoutines.forEach((routine, index) => {
+                const colorClass = colors[index % colors.length];
                 const div = document.createElement('div');
-                div.className = 'routine';
+                div.className = `routine ${colorClass}`;
                 div.innerHTML = `
                     <input type="checkbox" ${routine.checked ? 'checked' : ''} onchange="toggleRoutineCheck(${index})">
                     <span class="routine-time">${routine.time}</span> <span class="routine-emoji">${routine.emoji}</span> <span class="routine-text">${routine.text}</span>
@@ -850,44 +887,33 @@
         function loadTodos() {
             const todos = JSON.parse(localStorage.getItem('todos') || '{}');
             const currentTodos = todos[dateKey()] || [];
-            const tbody = document.getElementById('todosBody');
-            tbody.innerHTML = '';
+            const todosBody = document.getElementById('todosBody');
+            todosBody.innerHTML = '';
             currentTodos.forEach((todo, index) => {
-                const tr = document.createElement('tr');
-                const tdTask = document.createElement('td');
-                const checkBox = document.createElement('input');
-                checkBox.type = 'checkbox';
-                checkBox.checked = todo.checked;
-                checkBox.onchange = () => toggleTodoCheck(index);
-                tdTask.appendChild(checkBox);
-                const label = document.createElement('span');
-                label.innerHTML = `<span class="todo-importance">${todo.importance || ''}</span> - <span class="todo-priority">${todo.priority || ''}</span> - <span class="todo-task">${todo.task || ''}</span> - <span class="todo-estimatedTime">${todo.estimatedTime || ''}</span> - <span class="todo-startTime">${todo.startTime || ''}</span> - <span class="todo-deadline">${todo.deadline || ''}</span>`;
-                if (todo.checked) label.classList.add('completed');
-                tdTask.appendChild(label);
-                const tdAction = document.createElement('td');
-                const editButton = document.createElement('button');
-                editButton.textContent = 'Edit';
-                editButton.classList.add('edit-button');
-                editButton.addEventListener('click', () => editTodo(index));
-                tdAction.appendChild(editButton);
-                const deleteButton = document.createElement('button');
-                deleteButton.textContent = 'Delete';
-                deleteButton.classList.add('delete-button');
-                deleteButton.addEventListener('click', () => deleteTodo(index));
-                tdAction.appendChild(deleteButton);
-                const upButton = document.createElement('button');
-                upButton.textContent = 'Up';
-                upButton.classList.add('up-button');
-                upButton.addEventListener('click', () => moveTodo(index, 'up'));
-                tdAction.appendChild(upButton);
-                const downButton = document.createElement('button');
-                downButton.textContent = 'Down';
-                downButton.classList.add('down-button');
-                downButton.addEventListener('click', () => moveTodo(index, 'down'));
-                tdAction.appendChild(downButton);
-                tr.appendChild(tdTask);
-                tr.appendChild(tdAction);
-                tbody.appendChild(tr);
+                const div = document.createElement('div');
+                div.className = `todo-item ${todo.isNew ? 'new' : ''} ${todo.checked ? 'completed' : ''}`;
+                div.innerHTML = `
+                    <input type="checkbox" ${todo.checked ? 'checked' : ''} onchange="toggleTodoCheck(${index})">
+                    <span class="todo-importance">${todo.importance || ''}</span> - 
+                    <span class="todo-priority">${todo.priority || ''}</span> - 
+                    <span class="todo-task">${todo.task || ''}</span> - 
+                    <span class="todo-estimatedTime">${todo.estimatedTime || ''}</span> - 
+                    <span class="todo-startTime">${todo.startTime || ''}</span> - 
+                    <span class="todo-deadline">${todo.deadline || ''}</span>
+                    <button class="edit-button" onclick="editTodo(${index})">Edit</button>
+                    <button class="delete-button" onclick="deleteTodo(${index})">Delete</button>
+                    <button class="up-button" onclick="moveTodo(${index}, 'up')">Up</button>
+                    <button class="down-button" onclick="moveTodo(${index}, 'down')">Down</button>
+                `;
+                todosBody.appendChild(div);
+                if (todo.isNew) {
+                    setTimeout(() => {
+                        todo.isNew = false;
+                        todos[dateKey()] = currentTodos;
+                        localStorage.setItem('todos', JSON.stringify(todos));
+                        div.classList.remove('new');
+                    }, 3000);
+                }
             });
         }
 
@@ -904,7 +930,7 @@
             }
             const todos = JSON.parse(localStorage.getItem('todos') || '{}');
             const currentTodos = todos[dateKey()] || [];
-            currentTodos.push({ importance, priority, task, estimatedTime, startTime, deadline, checked: false });
+            currentTodos.push({ importance, priority, task, estimatedTime, startTime, deadline, checked: false, isNew: true });
             todos[dateKey()] = currentTodos;
             localStorage.setItem('todos', JSON.stringify(todos));
             document.getElementById('newImportance').value = '';
@@ -1011,10 +1037,10 @@
         function loadPriority() {
             const priorityTasks = JSON.parse(localStorage.getItem('priorityTasks') || '{}');
             const currentTasks = priorityTasks[dateKey()] || {};
-            document.getElementById('task1').value = data.task1 || '';
-            document.getElementById('task2').value = data.task2 || '';
-            document.getElementById('task3').value = data.task3 || '';
-            document.getElementById('task4').value = data.task4 || '';
+            document.getElementById('task1').value = currentTasks.task1 || '';
+            document.getElementById('task2').value = currentTasks.task2 || '';
+            document.getElementById('task3').value = currentTasks.task3 || '';
+            document.getElementById('task4').value = currentTasks.task4 || '';
         }
 
         function saveBucketList() {
