@@ -281,6 +281,9 @@
             max-height: 500px;
             overflow-y: auto;
         }
+        .section .next-button {
+            margin-top: 10px;
+        }
         /* Priority styles */
         #prioritySection {
             margin: 10px;
@@ -531,38 +534,47 @@
             <div class="section">
                 <h3>Words to self ></h3>
                 <textarea id="wordsToSelf" placeholder="Anything you want to tell yourself?"></textarea>
+                <button class="next-button" onclick="copyWordsToSelfToNextDay()">Next</button>
             </div>
             <div class="section">
                 <h3>Best possible scenario ></h3>
                 <textarea id="reflection" placeholder="No pressure. Start with one sentence."></textarea>
+                <button class="next-button" onclick="copyReflectionToNextDay()">Next</button>
             </div>
             <div class="section">
                 <h3>Today's goals (important, urgent) ></h3>
                 <textarea id="gratitude" placeholder="No pressure. Start with one sentence."></textarea>
+                <button class="next-button" onclick="copyGratitudeToNextDay()">Next</button>
             </div>
             <div class="section">
                 <h3>Things to improve ></h3>
                 <textarea id="challenges" placeholder="No pressure. Start with one sentence."></textarea>
+                <button class="next-button" onclick="copyChallengesToNextDay()">Next</button>
             </div>
             <div class="section">
                 <h3>Today's achieved goals (important, urgent) ></h3>
                 <textarea id="plans" placeholder="No pressure. Start with one sentence."></textarea>
+                <button class="next-button" onclick="copyPlansToNextDay()">Next</button>
             </div>
             <div class="section">
                 <h3>Praise and gratitude to myself ></h3>
                 <textarea id="motivation" placeholder="No pressure. Start with one sentence."></textarea>
+                <button class="next-button" onclick="copyMotivationToNextDay()">Next</button>
             </div>
             <div class="section">
                 <h3>Problems, obstacles, reasons for failure, reflection ></h3>
                 <textarea id="reflection2" placeholder="No pressure. Start with one sentence."></textarea>
+                <button class="next-button" onclick="copyReflection2ToNextDay()">Next</button>
             </div>
             <div class="section">
                 <h3>By when, how, solutions, lessons learned ></h3>
                 <textarea id="reflection3" placeholder="No pressure. Start with one sentence."></textarea>
+                <button class="next-button" onclick="copyReflection3ToNextDay()">Next</button>
             </div>
             <div class="section">
                 <h3>Tomorrow's goals (important, urgent) ></h3>
                 <textarea id="reflection4" placeholder="No pressure. Start with one sentence."></textarea>
+                <button class="next-button" onclick="copyReflection4ToNextDay()">Next</button>
             </div>
         </div>
     </div>
@@ -1103,6 +1115,105 @@
             document.getElementById('reflection2').value = data.reflection2 || '';
             document.getElementById('reflection3').value = data.reflection3 || '';
             document.getElementById('reflection4').value = data.reflection4 || '';
+        }
+
+        function copyWordsToSelfToNextDay() {
+            const reflections = JSON.parse(localStorage.getItem('reflections') || '{}');
+            const currentData = reflections[dateKey()] || {};
+            const nextDateKey = getNextDateKey();
+            const nextData = reflections[nextDateKey] || {};
+            nextData.wordsToSelf = document.getElementById('wordsToSelf').value;
+            reflections[nextDateKey] = nextData;
+            localStorage.setItem('reflections', JSON.stringify(reflections));
+            alert(`Words to Self copied to ${nextDateKey}`);
+        }
+
+        function copyReflectionToNextDay() {
+            const reflections = JSON.parse(localStorage.getItem('reflections') || '{}');
+            const currentData = reflections[dateKey()] || {};
+            const nextDateKey = getNextDateKey();
+            const nextData = reflections[nextDateKey] || {};
+            nextData.reflection = document.getElementById('reflection').value;
+            reflections[nextDateKey] = nextData;
+            localStorage.setItem('reflections', JSON.stringify(reflections));
+            alert(`Best Possible Scenario copied to ${nextDateKey}`);
+        }
+
+        function copyGratitudeToNextDay() {
+            const reflections = JSON.parse(localStorage.getItem('reflections') || '{}');
+            const currentData = reflections[dateKey()] || {};
+            const nextDateKey = getNextDateKey();
+            const nextData = reflections[nextDateKey] || {};
+            nextData.gratitude = document.getElementById('gratitude').value;
+            reflections[nextDateKey] = nextData;
+            localStorage.setItem('reflections', JSON.stringify(reflections));
+            alert(`Today's Goals copied to ${nextDateKey}`);
+        }
+
+        function copyChallengesToNextDay() {
+            const reflections = JSON.parse(localStorage.getItem('reflections') || '{}');
+            const currentData = reflections[dateKey()] || {};
+            const nextDateKey = getNextDateKey();
+            const nextData = reflections[nextDateKey] || {};
+            nextData.challenges = document.getElementById('challenges').value;
+            reflections[nextDateKey] = nextData;
+            localStorage.setItem('reflections', JSON.stringify(reflections));
+            alert(`Things to Improve copied to ${nextDateKey}`);
+        }
+
+        function copyPlansToNextDay() {
+            const reflections = JSON.parse(localStorage.getItem('reflections') || '{}');
+            const currentData = reflections[dateKey()] || {};
+            const nextDateKey = getNextDateKey();
+            const nextData = reflections[nextDateKey] || {};
+            nextData.plans = document.getElementById('plans').value;
+            reflections[nextDateKey] = nextData;
+            localStorage.setItem('reflections', JSON.stringify(reflections));
+            alert(`Today's Achieved Goals copied to ${nextDateKey}`);
+        }
+
+        function copyMotivationToNextDay() {
+            const reflections = JSON.parse(localStorage.getItem('reflections') || '{}');
+            const currentData = reflections[dateKey()] || {};
+            const nextDateKey = getNextDateKey();
+            const nextData = reflections[nextDateKey] || {};
+            nextData.motivation = document.getElementById('motivation').value;
+            reflections[nextDateKey] = nextData;
+            localStorage.setItem('reflections', JSON.stringify(reflections));
+            alert(`Praise and Gratitude to Myself copied to ${nextDateKey}`);
+        }
+
+        function copyReflection2ToNextDay() {
+            const reflections = JSON.parse(localStorage.getItem('reflections') || '{}');
+            const currentData = reflections[dateKey()] || {};
+            const nextDateKey = getNextDateKey();
+            const nextData = reflections[nextDateKey] || {};
+            nextData.reflection2 = document.getElementById('reflection2').value;
+            reflections[nextDateKey] = nextData;
+            localStorage.setItem('reflections', JSON.stringify(reflections));
+            alert(`Problems, Obstacles, Reasons for Failure copied to ${nextDateKey}`);
+        }
+
+        function copyReflection3ToNextDay() {
+            const reflections = JSON.parse(localStorage.getItem('reflections') || '{}');
+            const currentData = reflections[dateKey()] || {};
+            const nextDateKey = getNextDateKey();
+            const nextData = reflections[nextDateKey] || {};
+            nextData.reflection3 = document.getElementById('reflection3').value;
+            reflections[nextDateKey] = nextData;
+            localStorage.setItem('reflections', JSON.stringify(reflections));
+            alert(`By When, How, Solutions, Lessons Learned copied to ${nextDateKey}`);
+        }
+
+        function copyReflection4ToNextDay() {
+            const reflections = JSON.parse(localStorage.getItem('reflections') || '{}');
+            const currentData = reflections[dateKey()] || {};
+            const nextDateKey = getNextDateKey();
+            const nextData = reflections[nextDateKey] || {};
+            nextData.reflection4 = document.getElementById('reflection4').value;
+            reflections[nextDateKey] = nextData;
+            localStorage.setItem('reflections', JSON.stringify(reflections));
+            alert(`Tomorrow's Goals copied to ${nextDateKey}`);
         }
 
         function savePriority(taskId) {
