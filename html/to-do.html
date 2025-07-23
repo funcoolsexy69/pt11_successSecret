@@ -513,6 +513,7 @@
             <input id="newEmoji" placeholder="Emoji (e.g., ❤️)">
             <input id="newText" placeholder="Text">
             <button onclick="addRoutine()">Add Routine</button>
+            <button class="next-button" onclick="copyAllRoutinesToNextDay()">Copy All to Next Day</button>
         </div>
     </div>
     <div id="todosSection" class="hidden">
@@ -952,6 +953,19 @@
             routines[nextDateKey] = nextRoutines;
             localStorage.setItem('routines', JSON.stringify(routines));
             alert(`Routine "${routine.text}" copied to ${nextDateKey}`);
+        }
+
+        function copyAllRoutinesToNextDay() {
+            const routines = JSON.parse(localStorage.getItem('routines') || '{}');
+            const currentRoutines = routines[dateKey()] || [];
+            const nextDateKey = getNextDateKey();
+            const nextRoutines = routines[nextDateKey] || [];
+            currentRoutines.forEach(routine => {
+                nextRoutines.push({ time: routine.time, emoji: routine.emoji, text: routine.text, checked: false });
+            });
+            routines[nextDateKey] = nextRoutines;
+            localStorage.setItem('routines', JSON.stringify(routines));
+            alert(`All routines copied to ${nextDateKey}`);
         }
 
         function loadTodos() {
