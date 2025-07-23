@@ -302,18 +302,7 @@
             padding: 5px;
             border-radius: 8px;
             box-sizing: border-box;
-        }
-        .quadrant:nth-child(1) {
-            background-color: #ffebee; /* Light Red */
-        }
-        .quadrant:nth-child(2) {
-            background-color: #ffebee; /* Light Red */
-        }
-        .quadrant:nth-child(3) {
-            background-color: #fffde7; /* Light Yellow */
-        }
-        .quadrant:nth-child(4) {
-            background-color: #fffde7; /* Light Yellow */
+            background-color: #f7d9e8; /* Matches bucketlist-item */
         }
         .quadrant h2 {
             margin: 0 0 5px 0;
@@ -385,7 +374,7 @@
             height: 40px;
         }
         .bucketlist-item textarea {
-            height: 60px;
+            height: 120px; /* Doubled from 60px */
             resize: vertical;
         }
         .bucketlist-item input::placeholder,
@@ -883,7 +872,7 @@
                 tdAction.appendChild(editButton);
                 const deleteButton = document.createElement('button');
                 deleteButton.textContent = 'Delete';
-                editButton.classList.add('delete-button');
+                deleteButton.classList.add('delete-button');
                 deleteButton.addEventListener('click', () => deleteTodo(index));
                 tdAction.appendChild(deleteButton);
                 const upButton = document.createElement('button');
@@ -1022,10 +1011,10 @@
         function loadPriority() {
             const priorityTasks = JSON.parse(localStorage.getItem('priorityTasks') || '{}');
             const currentTasks = priorityTasks[dateKey()] || {};
-            document.getElementById('task1').value = currentTasks['task1'] || '';
-            document.getElementById('task2').value = currentTasks['task2'] || '';
-            document.getElementById('task3').value = currentTasks['task3'] || '';
-            document.getElementById('task4').value = currentTasks['task4'] || '';
+            document.getElementById('task1').value = data.task1 || '';
+            document.getElementById('task2').value = data.task2 || '';
+            document.getElementById('task3').value = data.task3 || '';
+            document.getElementById('task4').value = data.task4 || '';
         }
 
         function saveBucketList() {
