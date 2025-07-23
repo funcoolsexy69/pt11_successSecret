@@ -99,12 +99,6 @@ body {
     z-index: 1; /* 클릭 가능성을 위해 다른 요소 위에 위치하도록 설정 */
  
 }
-  
-  
-.author {
-    font-size: 50px;
-    font-style: italic;
-}
 
 .main {
     width: 100vw;
@@ -117,53 +111,6 @@ body {
     color: white;
     -webkit-text-stroke-color: coral;
   	-webkit-text-stroke-width: 1px;
-}
-
-.quote {
-    width: 100vw;
-    height: 160vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: 50px;
-    color: white;
-}
-
-.blackhole {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 300vw; /* 화면 너비의 3배로 설정하여 화면을 넘어가는 부분을 커버 */
-    height: 300vh; /* 화면 높이의 3배로 설정하여 화면을 넘어가는 부분을 커버 */
-    background: radial-gradient(circle, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%); /* 원형 그라데이션을 통해 블랙홀 효과 구현 */
-    animation: blackhole-animation 3s ease-in-out forwards; /* 3초 동안 애니메이션을 적용하고 끝나면 마지막 상태를 유지 */
-     z-index: -1; /* 다른 요소 뒤에 위치하도록 설정 */
-}
-
-@keyframes blackhole-animation {
-    0% {
-        transform: translate(-50%, -50%) scale(0); /* 초기 위치에서 크기 0으로 시작 */
-        opacity: 1; /* 완전히 투명하지 않도록 설정 */
-    }
-    100% {
-        transform: translate(-50%, -50%) scale(3); /* 중앙으로 이동하면서 배경을 커짐 */
-        opacity: 0; /* 완전히 투명하도록 설정 */
-    }
-}
-
-  
-  @keyframes wave {
-    0% {
-        transform: translateY(0); /* 시작 지점 */
-    }
-    50% {
-        transform: translateY(-10px); /* 물결 위로 이동 */
-    }
-    100% {
-        transform: translateY(0); /* 다시 원래 위치로 돌아옴 */
-    }
 }
 
 #slide {
