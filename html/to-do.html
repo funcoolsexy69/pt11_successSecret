@@ -222,12 +222,18 @@
                 day.setDate(day.getDate() + i);
                 const div = document.createElement('div');
                 div.className = 'day' + (day.toDateString() === currentDate.toDateString() ? ' active' : '');
-                div.innerHTML = `${day.toLocaleString('default', { weekday: 'short' })}<br>${day.getDate()}`;
-                div.onclick = () => {
+                const span = document.createElement('span');
+                span.innerHTML = `${day.toLocaleString('default', { weekday: 'short' })}<br>${day.getDate()}`;
+                span.style.display = 'block';
+                span.style.height = '100%';
+                span.style.lineHeight = '20px';
+                span.onclick = () => {
                     currentDate = day;
                     updateDateDisplay();
+                    renderCalendar();
                     loadItems();
                 };
+                div.appendChild(span);
                 calendar.appendChild(div);
             }
         }
