@@ -39,7 +39,7 @@ body {
      z-index: 1; /* 클릭 가능성을 위해 다른 요소 위에 위치하도록 설정 */
 }
 
-.vision-board, .bucket-list, .priority, .to-do, .today, .reflection {
+.vision-board, .to-do, .today, .reflection {
     position: absolute;
     top: 30px;
     left: 100px; /* 오른쪽으로 조정할 값 */
@@ -62,28 +62,13 @@ body {
      cursor: pointer;
 }
 
-.bucket-list {
-    left: 400px; /* "비전보드"와의 간격 조정을 위한 값 */
-     cursor: pointer;
-}
-
-.priority {
-    left: 520px; /* "버킷리스트"와의 간격 조정을 위한 값 */
-     cursor: pointer;
-}
-
 .to-do {
-    left: 620px; /* "우선순위"와의 간격 조정을 위한 값 */
+    left: 400px; /* "우선순위"와의 간격 조정을 위한 값 */
      cursor: pointer;
 }
 
 .today {
-    left: 720px; /* "해야할일"과의 간격 조정을 위한 값 */
-      cursor: pointer;
-}
-
-.reflection {
-    left: 820px; /* "오늘하루"와의 간격 조정을 위한 값 */
+    left: 500px; /* "해야할일"과의 간격 조정을 위한 값 */
       cursor: pointer;
 }
 
@@ -166,19 +151,6 @@ body {
         transform: translate(-50%, -50%) scale(3); /* 중앙으로 이동하면서 배경을 커짐 */
         opacity: 0; /* 완전히 투명하도록 설정 */
     }
-}
-
-.message {
-    position: absolute; /* 절대 위치로 설정하여 다른 요소에 영향을 받지 않도록 합니다. */
-    top: 50%; /* 슬라이드 쇼의 세로 중앙에 위치하기 위해 50%로 설정합니다. */
-    left: 50%; /* 슬라이드 쇼의 가로 중앙에 위치하기 위해 50%로 설정합니다. */
-    transform: translate(-50%, -50%); /* 슬라이드 쇼의 중앙으로 메시지를 이동시킵니다. */
-    font-size: 80px; /* 메시지의 글자 크기를 설정합니다. */
-    font-weight: bold; /* 메시지의 글자 굵기를 설정합니다. */
-    color: white; /* 메시지의 글자 색상을 설정합니다. */
-    z-index: 1; /* 슬라이드 쇼 위에 메시지를 배치합니다. */
-     -webkit-text-stroke-color: black;
-  	-webkit-text-stroke-width: 0.5px; 
 }
 
   
