@@ -71,22 +71,161 @@
     ol li {
         margin-bottom: 15px;
     }
+
+    #retrospectiveList {
+        background-color: #ffffff;
+        border-radius: 10px;
+        width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
+    }
+
+    #retrospectiveList ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    #retrospectiveList li {
+        margin-bottom: 20px;
+        border-bottom: 1px solid #ced4da;
+        padding-bottom: 10px;
+    }
+
+    #retrospectiveList li:last-child {
+        border-bottom: none;
+    }
+
+    #retrospectiveList h3 {
+        margin: 0 0 10px 0;
+        font-size: 1.1em;
+    }
+
+    #retrospectiveList p {
+        margin: 5px 0;
+    }
+
+    #retrospectiveList button {
+        margin-right: 10px;
+    }
     
 </style>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script type="text/javascript">
 
-function saveTask(taskId, event) {
-    event.preventDefault(); // 기본 동작 막기
+$(document).ready(function() {
+    renderList();
+    $('form').on('submit', function(event) {
+        event.preventDefault();
+        saveRetrospective();
+    });
+});
 
-    var taskText = document.getElementById(taskId).value;
-    alert("저장되었습니다.");
+let editingId = null;
+
+function saveRetrospective() {
+    const done = $('#done').val().trim();
+    const good = $('#good').val().trim();
+    const bad = $('#bad').val().trim();
+    const fix = $('#fix').val().trim();
+    const todo = $('#todo').val().trim();
+
+    if (!done || !good || !bad || !fix || !todo) {
+        alert('모든 필드를 입력해주세요.');
+        return;
+    }
+
+    let retros = getRetrospectives();
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('ko-KR');
+
+    if (editingId) {
+        retros = retros.map(r => {
+            if (r.id === editingId) {
+                return { ...r, done, good, bad, fix, todo };
+            }
+            return r;
+        });
+        alert('수정되었습니다.');
+        $('#submitBtn').text('등록');
+        editingId = null;
+    } else {
+        const newRetro = {
+            id: Date.now(),
+            date: dateStr,
+            done,
+            good,
+            bad,
+            fix,
+            todo
+        };
+        retros.push(newRetro);
+        alert('등록되었습니다.');
+    }
+
+    localStorage.setItem('retrospectives', JSON.stringify(retros));
+    clearForm();
+    renderList();
 }
 
+function getRetrospectives() {
+    return JSON.parse(localStorage.getItem('retrospectives')) || [];
+}
 
+function clearForm() {
+    $('textarea').val('');
+}
+
+function renderList() {
+    const retros = getRetrospectives();
+    if (retros.length === 0) {
+        $('#retrospectiveList').html('<p>등록된 회고가 없습니다.</p>');
+        return;
+    }
+
+    let html = '<ul>';
+    retros.forEach(r => {
+        html += `
+            <li>
+                <h3>${r.date}</h3>
+                <p><strong>오늘 달성한 목표:</strong> ${r.done}</p>
+                <p><strong>나에게 칭찬 및 감사:</strong> ${r.good}</p>
+                <p><strong>문제점, 장애물, 실패한이유, 반성:</strong> ${r.bad}</p>
+                <p><strong>언제까지, 어떻게, 해결방법, 교훈:</strong> ${r.fix}</p>
+                <p><strong>내일 달성할 목표:</strong> ${r.todo}</p>
+                <button onclick="editRetrospective(${r.id})">수정</button>
+                <button onclick="deleteRetrospective(${r.id})">삭제</button>
+            </li>
+        `;
+    });
+    html += '</ul>';
+    $('#retrospectiveList').html(html);
+}
+
+function editRetrospective(id) {
+    const retros = getRetrospectives();
+    const r = retros.find(retro => retro.id === id);
+    if (r) {
+        $('#done').val(r.done);
+        $('#good').val(r.good);
+        $('#bad').val(r.bad);
+        $('#fix').val(r.fix);
+        $('#todo').val(r.todo);
+        editingId = id;
+        $('#submitBtn').text('수정');
+    }
+}
+
+function deleteRetrospective(id) {
+    if (confirm('정말 삭제하시겠습니까?')) {
+        let retros = getRetrospectives().filter(r => r.id !== id);
+        localStorage.setItem('retrospectives', JSON.stringify(retros));
+        renderList();
+        alert('삭제되었습니다.');
+    }
+}
 
 </script>
 </head>
@@ -100,33 +239,37 @@ function saveTask(taskId, event) {
         <ol>
             <li>
                 <label for="done">오늘 달성한 목표</label>
-                <textarea id="done" name="done" required="required" placeholder="SQL 1장 정독하고 요약하기" autofocus="autofocus"></textarea> <button class="save-button" onclick="saveTask('done', event)">저장</button>
+                <textarea id="done" name="done" required="required" placeholder="SQL 1장 정독하고 요약하기" autofocus="autofocus"></textarea>
             </li>
 
             <li>
                 <label for="good">나에게 칭찬 및 감사</label>
-                <textarea id="good" name="good" required="required" placeholder="너무 어렵고 포기하고 싶지만 참고 버텨냈다! 나의 인내심에 박수를" autofocus="autofocus"></textarea> <button class="save-button" onclick="saveTask('good', event)">저장</button>
+                <textarea id="good" name="good" required="required" placeholder="너무 어렵고 포기하고 싶지만 참고 버텨냈다! 나의 인내심에 박수를" autofocus="autofocus"></textarea>
             </li>
 
             <li>
                 <label for="bad">문제점, 장애물, 실패한이유, 반성</label>
-                <textarea id="bad" name="bad" required="required" placeholder="요즘 운동을 게을리해서 체력이 떨어진 것 같다." autofocus="autofocus"></textarea> <button class="save-button" onclick="saveTask('bad', event)">저장</button>
+                <textarea id="bad" name="bad" required="required" placeholder="요즘 운동을 게을리해서 체력이 떨어진 것 같다." autofocus="autofocus"></textarea>
             </li>
 
             <li>
                 <label for="fix">언제까지, 어떻게, 해결방법, 교훈</label>
-                <textarea id="fix" name="fix" required="required" placeholder="내일은 꼭 하루만보걷기, 학교계단 걸어서 올라가기" autofocus="autofocus"></textarea> <button class="save-button" onclick="saveTask('fix', event)">저장</button>
+                <textarea id="fix" name="fix" required="required" placeholder="내일은 꼭 하루만보걷기, 학교계단 걸어서 올라가기" autofocus="autofocus"></textarea>
             </li>
             
             <li>
                 <label for="todo">내일 달성할 목표</label>
-                <textarea id="todo" name="todo" required="required" placeholder="SQL 1장 문제풀이 하기" autofocus="autofocus"></textarea> <button class="save-button" onclick="saveTask('todo', event)">저장</button>
+                <textarea id="todo" name="todo" required="required" placeholder="SQL 1장 문제풀이 하기" autofocus="autofocus"></textarea>
             </li>
 
         </ol>
+        <button type="submit" id="submitBtn">등록</button>
     </fieldset>
 
 
 </form>
+
+<div id="retrospectiveList"></div>
+
 </body>
 </html>
