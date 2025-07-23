@@ -9,15 +9,8 @@
             font-family: sans-serif;
             margin: 0;
             padding: 0;
-            padding-bottom: 60px; /* Add padding to account for bottom-nav height */
+            padding-bottom: 60px;
             background-color: #f5f5f5;
-        }
-        .header {
-            background-color: #e83e8c;
-            color: white;
-            padding: 10px;
-            text-align: center;
-            font-size: 1.2em;
         }
         table {
             border-collapse: collapse;
@@ -74,7 +67,6 @@
     </style>
 </head>
 <body>
-    <div class="header">Today</div>
     <table>
         <thead>
             <tr>
@@ -103,6 +95,20 @@
         document.addEventListener("DOMContentLoaded", function() {
             var tableBody = document.getElementById("table-body");
 
+            // Load saved data from localStorage
+            function loadTableData() {
+                const savedData = localStorage.getItem("tableData");
+                return savedData ? JSON.parse(savedData) : {};
+            }
+
+            // Save data to localStorage
+            function saveTableData(data) {
+                localStorage.setItem("tableData", JSON.stringify(data));
+            }
+
+            // Initialize table
+            const savedData = loadTableData();
+
             for (var hour = 0; hour < 24; hour++) {
                 var row = document.createElement("tr");
                 var timeCell = document.createElement("td");
@@ -112,6 +118,43 @@
                 for (var day = 0; day < 7; day++) {
                     var cell = document.createElement("td");
                     cell.contentEditable = true;
+                    cell.dataset.hour = hour;
+                    cell.dataset.day = day;
+
+                    // Load saved data into cell
+                    if (savedData[`${hour}-${day}`]) {
+                        cell.textContent = savedData[`${hour}-${day}`];
+                    }
+
+                    // Save data on input
+                    cell.addEventListener("input", function() {
+                        const data = loadTableData();
+                        data[`${this.dataset.hour}-${this.dataset.day}`] = this.textContent;
+                        saveTableData(data);
+                    });
+
+                    // Handle arrow key navigation
+                    cell.addEventListener("keydown", function(e) {
+                        const hour = parseInt(this.dataset.hour);
+                        const day = parseInt(this.dataset.day);
+                        let targetCell = null;
+
+                        if (e.key === "ArrowUp" && hour > 0) {
+                            targetCell = document.querySelector(`td[data-hour="${hour - 1}"][data-day="${day}"]`);
+                        } else if (e.key === "ArrowDown" && hour < 23) {
+                            targetCell = document.querySelector(`td[data-hour="${hour + 1}"][data-day="${day}"]`);
+                        } else if (e.key === "ArrowLeft" && day > 0) {
+                            targetCell = document.querySelector(`td[data-hour="${hour}"][data-day="${day - 1}"]`);
+                        } else if (e.key === "ArrowRight" && day < 6) {
+                            targetCell = document.querySelector(`td[data-hour="${hour}"][data-day="${day + 1}"]`);
+                        }
+
+                        if (targetCell) {
+                            e.preventDefault(); // Prevent default scrolling
+                            targetCell.focus();
+                        }
+                    });
+
                     row.appendChild(cell);
                 }
 
