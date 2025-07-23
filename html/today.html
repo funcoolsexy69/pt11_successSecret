@@ -1,62 +1,102 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>오늘하루</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Today</title>
     <style>
         body {
-            background-color: pink;
-           background: url(../img/star.jpg) no-repeat fixed;
-    	   background-size: cover;
+            font-family: sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
         }
-
+        .header {
+            background-color: #e83e8c;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-size: 1.2em;
+        }
         table {
             border-collapse: collapse;
             width: 100%;
-            table-layout: fixed; /* 테이블 레이아웃 고정 */
-            background-color: pink;
+            table-layout: fixed;
+            margin: 10px;
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
         }
-
         th, td {
-            border: 1px solid #dddddd;
+            border-bottom: 1px solid #ddd;
             text-align: center;
-            padding: 8px;
-            background-color: white;
+            padding: 10px;
+            background-color: #fff;
         }
-
         th {
-            background-color: pink;
+            background-color: #e83e8c;
+            color: white;
         }
-
         th:first-child, td:first-child {
             text-align: center;
-            width: 60px; /* 첫 번째 열 너비 조정 */
+            width: 60px;
         }
-
         td[contenteditable="true"]:focus {
-            outline: 4px solid hotpink;
+            outline: 4px solid #c2255c;
+        }
+        td[contenteditable="true"]:hover {
+            background-color: #f7d9e8;
+            cursor: text;
+        }
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px;
+            border-top: 1px solid #e0e0e0;
+        }
+        .bottom-nav button {
+            padding: 8px 15px;
+            background-color: #e83e8c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: sans-serif;
+        }
+        .bottom-nav button:hover {
+            background-color: #c2255c;
         }
     </style>
 </head>
-
-
 <body>
+    <div class="header">Schedule</div>
     <table>
         <thead>
             <tr>
-                <th>시간대</th>
-                <th>일요일</th>
-                <th>월요일</th>
-                <th>화요일</th>
-                <th>수요일</th>
-                <th>목요일</th>
-                <th>금요일</th>
-                <th>토요일</th>
+                <th>Time Slot</th>
+                <th>Sunday</th>
+                <th>Monday</th>
+                <th>Tuesday</th>
+                <th>Wednesday</th>
+                <th>Thursday</th>
+                <th>Friday</th>
+                <th>Saturday</th>
             </tr>
         </thead>
         <tbody id="table-body">
         </tbody>
     </table>
+    <div class="bottom-nav">
+        <button>Home</button>
+        <button>Statistics</button>
+        <button>Discover</button>
+        <button>Social</button>
+        <button>MY</button>
+    </div>
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
