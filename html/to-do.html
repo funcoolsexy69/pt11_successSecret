@@ -70,7 +70,7 @@
             background-color: #e83e8c;
             color: white;
         }
-        .routines, .todos, .priority {
+        .routines, .todos, .priority, .bucketlist {
             margin: 10px;
         }
         .routines {
@@ -82,6 +82,10 @@
             overflow-y: auto;
         }
         .priority {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .bucketlist {
             max-height: 500px;
             overflow-y: auto;
         }
@@ -136,35 +140,6 @@
             justify-content: space-around;
             padding: 10px;
             border-top: 1px solid #e0e0e0;
-        }
-        /* Light rainbow colors for routines */
-        .routine:nth-child(1) { background-color: #ffebee; } /* Light Red */
-        .routine:nth-child(2) { background-color: #fff3e0; } /* Light Orange */
-        .routine:nth-child(3) { background-color: #fffde7; } /* Light Yellow */
-        .routine:nth-child(4) { background-color: #e8f5e9; } /* Light Green */
-        .routine:nth-child(5) { background-color: #e3f2fd; } /* Light Blue */
-        .routine:nth-child(6) { background-color: #ede7f6; } /* Light Indigo */
-        .routine:nth-child(7) { background-color: #f3e5f5; } /* Light Violet */
-        .routine:nth-child(8) { background-color: #ffebee; } /* Light Red */
-        .routine:nth-child(9) { background-color: #fff3e0; } /* Light Orange */
-        .routine:nth-child(10) { background-color: #fffde7; } /* Light Yellow */
-        .routine:nth-child(11) { background-color: #e8f5e9; } /* Light Green */
-        .routine:nth-child(12) { background-color: #e3f2fd; } /* Light Blue */
-        .routine:nth-child(13) { background-color: #ede7f6; } /* Light Indigo */
-        .routine:nth-child(14) { background-color: #f3e5f5; } /* Light Violet */
-        .routine:nth-child(15) { background-color: #ffebee; } /* Light Red */
-        /* To-dos table styles */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            border-bottom: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
-        }
-        .completed {
-            text-decoration: line-through;
         }
         button {
             padding: 8px 15px;
@@ -324,7 +299,7 @@
         .quadrant {
             flex: 1;
             min-width: 300px;
-            padding: 5px; /* Reduced padding to maximize textarea space */
+            padding: 5px;
             border-radius: 8px;
             box-sizing: border-box;
         }
@@ -351,11 +326,11 @@
             margin: 0;
         }
         .tasks li {
-            margin-bottom: 5px; /* Reduced margin to maximize textarea space */
+            margin-bottom: 5px;
         }
         .priority textarea {
             width: 100%;
-            height: 120px; /* Increased height for larger input area */
+            height: 120px;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
@@ -368,6 +343,57 @@
             color: #999;
         }
         .priority textarea:focus {
+            outline: 4px solid #c2255c;
+        }
+        /* Bucket List styles */
+        #bucketlistSection {
+            margin: 10px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .bucketlist-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .bucketlist-item {
+            flex: 1;
+            min-width: 300px;
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #f7d9e8; /* Matches pinned-item */
+            box-sizing: border-box;
+        }
+        .bucketlist-item h2 {
+            margin: 0 0 5px 0;
+            font-size: 1.1em;
+            color: #555;
+        }
+        .bucketlist-item input,
+        .bucketlist-item textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 0.9em;
+            color: #666;
+            box-sizing: border-box;
+        }
+        .bucketlist-item input {
+            height: 40px;
+        }
+        .bucketlist-item textarea {
+            height: 60px;
+            resize: vertical;
+        }
+        .bucketlist-item input::placeholder,
+        .bucketlist-item textarea::placeholder {
+            color: #999;
+        }
+        .bucketlist-item input:focus,
+        .bucketlist-item textarea:focus {
             outline: 4px solid #c2255c;
         }
     </style>
@@ -386,6 +412,7 @@
         </div>
     </div>
     <div class="tabs">
+        <div class="tab" onclick="switchTab('bucketlist')">Bucket List</div>
         <div class="tab" onclick="switchTab('priority')">Priority</div>
         <div class="tab active" onclick="switchTab('routines')">Routines</div>
         <div class="tab" onclick="switchTab('todos')">To-dos</div>
@@ -489,6 +516,28 @@
             <div class="section">
                 <h3>Tomorrow's goals (important, urgent) ></h3>
                 <textarea id="reflection4" placeholder="No pressure. Start with one sentence."></textarea>
+            </div>
+        </div>
+    </div>
+    <div id="bucketlistSection" class="bucketlist hidden">
+        <div class="bucketlist-container">
+            <div class="bucketlist-item">
+                <h2>Bucket List Item 1</h2>
+                <input type="text" id="title_bucket1" placeholder="Title">
+                <input type="text" id="deadline_bucket1" placeholder="Deadline">
+                <textarea id="description_bucket1" placeholder="Description"></textarea>
+            </div>
+            <div class="bucketlist-item">
+                <h2>Bucket List Item 2</h2>
+                <input type="text" id="title_bucket2" placeholder="Title">
+                <input type="text" id="deadline_bucket2" placeholder="Deadline">
+                <textarea id="description_bucket2" placeholder="Description"></textarea>
+            </div>
+            <div class="bucketlist-item">
+                <h2>Bucket List Item 3</h2>
+                <input type="text" id="title_bucket3" placeholder="Title">
+                <input type="text" id="deadline_bucket3" placeholder="Deadline">
+                <textarea id="description_bucket3" placeholder="Description"></textarea>
             </div>
         </div>
     </div>
@@ -632,6 +681,7 @@
             document.getElementById('routinesSection').classList.toggle('hidden', tab !== 'routines');
             document.getElementById('todosSection').classList.toggle('hidden', tab !== 'todos');
             document.getElementById('reflectionsSection').classList.toggle('hidden', tab !== 'reflections');
+            document.getElementById('bucketlistSection').classList.toggle('hidden', tab !== 'bucketlist');
         }
 
         function loadItems() {
@@ -640,6 +690,7 @@
             loadTodos();
             loadReflections();
             loadPriority();
+            loadBucketList();
         }
 
         function loadPinned() {
@@ -832,7 +883,7 @@
                 tdAction.appendChild(editButton);
                 const deleteButton = document.createElement('button');
                 deleteButton.textContent = 'Delete';
-                deleteButton.classList.add('delete-button');
+                editButton.classList.add('delete-button');
                 deleteButton.addEventListener('click', () => deleteTodo(index));
                 tdAction.appendChild(deleteButton);
                 const upButton = document.createElement('button');
@@ -977,18 +1028,51 @@
             document.getElementById('task4').value = currentTasks['task4'] || '';
         }
 
+        function saveBucketList() {
+            const data = {
+                title_bucket1: document.getElementById('title_bucket1').value,
+                deadline_bucket1: document.getElementById('deadline_bucket1').value,
+                description_bucket1: document.getElementById('description_bucket1').value,
+                title_bucket2: document.getElementById('title_bucket2').value,
+                deadline_bucket2: document.getElementById('deadline_bucket2').value,
+                description_bucket2: document.getElementById('description_bucket2').value,
+                title_bucket3: document.getElementById('title_bucket3').value,
+                deadline_bucket3: document.getElementById('deadline_bucket3').value,
+                description_bucket3: document.getElementById('description_bucket3').value
+            };
+            const bucketlist = JSON.parse(localStorage.getItem('bucketlist') || '{}');
+            bucketlist[dateKey()] = data;
+            localStorage.setItem('bucketlist', JSON.stringify(bucketlist));
+        }
+
+        function loadBucketList() {
+            const bucketlist = JSON.parse(localStorage.getItem('bucketlist') || '{}');
+            const data = bucketlist[dateKey()] || {};
+            document.getElementById('title_bucket1').value = data.title_bucket1 || '';
+            document.getElementById('deadline_bucket1').value = data.deadline_bucket1 || '';
+            document.getElementById('description_bucket1').value = data.description_bucket1 || '';
+            document.getElementById('title_bucket2').value = data.title_bucket2 || '';
+            document.getElementById('deadline_bucket2').value = data.deadline_bucket2 || '';
+            document.getElementById('description_bucket2').value = data.description_bucket2 || '';
+            document.getElementById('title_bucket3').value = data.title_bucket3 || '';
+            document.getElementById('deadline_bucket3').value = data.deadline_bucket3 || '';
+            document.getElementById('description_bucket3').value = data.description_bucket3 || '';
+        }
+
         // Initial setup
         updateDateDisplay();
         renderCalendar();
         loadItems();
 
-        // Reflection and Priority input save
-        document.querySelectorAll('#reflectionsSection textarea, #prioritySection textarea').forEach(textarea => {
-            textarea.addEventListener('input', () => {
-                if (textarea.closest('#reflectionsSection')) {
+        // Reflection, Priority, and Bucket List input save
+        document.querySelectorAll('#reflectionsSection textarea, #prioritySection textarea, #bucketlistSection input, #bucketlistSection textarea').forEach(input => {
+            input.addEventListener('input', () => {
+                if (input.closest('#reflectionsSection')) {
                     saveReflections();
-                } else if (textarea.closest('#prioritySection')) {
-                    savePriority(textarea.id);
+                } else if (input.closest('#prioritySection')) {
+                    savePriority(input.id);
+                } else if (input.closest('#bucketlistSection')) {
+                    saveBucketList();
                 }
             });
         });
@@ -1034,6 +1118,24 @@
             ];
             localStorage.setItem('routines', JSON.stringify(routines));
             loadRoutines();
+        }
+
+        // Initial bucket list if empty
+        const bucketlist = JSON.parse(localStorage.getItem('bucketlist') || '{}');
+        if (!bucketlist[dateKey()]) {
+            bucketlist[dateKey()] = {
+                title_bucket1: 'Run a Tech Company',
+                deadline_bucket1: 'January 2025',
+                description_bucket1: 'Plan, hire talent, delegate',
+                title_bucket2: 'Become CTO',
+                deadline_bucket2: 'December 2025',
+                description_bucket2: 'Iterate development projects quickly',
+                title_bucket3: 'Fluent English',
+                deadline_bucket3: 'December 2025',
+                description_bucket3: 'Maintain proficiency'
+            };
+            localStorage.setItem('bucketlist', JSON.stringify(bucketlist));
+            loadBucketList();
         }
     </script>
 </body>
