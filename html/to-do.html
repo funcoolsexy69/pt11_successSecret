@@ -6,15 +6,15 @@
     <title>MyRoutine</title>
     <style>
         body { font-family: sans-serif; margin: 0; padding: 0; background-color: #f5f5f5; }
-        .header { background-color: #ff9500; color: white; padding: 10px; text-align: center; }
+        .header { background-color: #e83e8c; color: white; padding: 10px; text-align: center; }
         .date { text-align: center; padding: 10px; }
         .calendar { display: flex; justify-content: center; gap: 10px; }
         .day { background-color: #e0e0e0; border-radius: 50%; width: 40px; height: 40px; line-height: 20px; text-align: center; cursor: pointer; }
-        .day.active { background-color: #4cd964; color: white; }
-        .pinned { background-color: #d9f7d9; padding: 10px; margin: 10px; border-radius: 8px; display: flex; align-items: center; }
+        .day.active { background-color: #e83e8c; color: white; }
+        .pinned { background-color: #f7d9e8; padding: 10px; margin: 10px; border-radius: 8px; display: flex; align-items: center; }
         .tabs { display: flex; justify-content: space-around; padding: 10px; }
         .tab { background-color: #e0e0e0; padding: 10px; border-radius: 8px; cursor: pointer; }
-        .tab.active { background-color: #4cd964; color: white; }
+        .tab.active { background-color: #e83e8c; color: white; }
         .routines, .todos { margin: 10px; }
         .routine { padding: 10px; margin-bottom: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px; }
         .routine button { background: #e83e8c; color: white; border: none; padding: 5px; cursor: pointer; margin-left: 5px; }
@@ -22,24 +22,24 @@
         .routine button:hover { opacity: 0.8; }
         .add-form { padding: 10px; display: flex; flex-direction: column; gap: 10px; }
         .add-form input { padding: 10px; }
-        .add-form button { background-color: #4cd964; color: white; border: none; padding: 10px; cursor: pointer; }
+        .add-form button { background-color: #e83e8c; color: white; border: none; padding: 10px; cursor: pointer; }
         .bottom-nav { position: fixed; bottom: 0; width: 100%; background-color: white; display: flex; justify-content: space-around; padding: 10px; border-top: 1px solid #e0e0e0; }
-        /* Gradient colors for routines */
-        .routine:nth-child(1) { background-color: #fff9c4; }
-        .routine:nth-child(2) { background-color: #ffe0b2; }
-        .routine:nth-child(3) { background-color: #fff59d; }
-        .routine:nth-child(4) { background-color: #dcedc8; }
-        .routine:nth-child(5) { background-color: #b3e5fc; }
-        .routine:nth-child(6) { background-color: #9fa8da; }
-        .routine:nth-child(7) { background-color: #ce93d8; }
-        .routine:nth-child(8) { background-color: #f48fb1; }
-        .routine:nth-child(9) { background-color: #bcaaa4; }
-        .routine:nth-child(10) { background-color: #e57373; }
-        .routine:nth-child(11) { background-color: #eeeeee; }
-        .routine:nth-child(12) { background-color: #f5f5f5; }
-        .routine:nth-child(13) { background-color: #e1bee7; }
-        .routine:nth-child(14) { background-color: #fffde7; }
-        .routine:nth-child(15) { background-color: #f8bbd0; }
+        /* Light rainbow colors for routines */
+        .routine:nth-child(1) { background-color: #ffebee; } /* Light Red */
+        .routine:nth-child(2) { background-color: #fff3e0; } /* Light Orange */
+        .routine:nth-child(3) { background-color: #fffde7; } /* Light Yellow */
+        .routine:nth-child(4) { background-color: #e8f5e9; } /* Light Green */
+        .routine:nth-child(5) { background-color: #e3f2fd; } /* Light Blue */
+        .routine:nth-child(6) { background-color: #ede7f6; } /* Light Indigo */
+        .routine:nth-child(7) { background-color: #f3e5f5; } /* Light Violet */
+        .routine:nth-child(8) { background-color: #ffebee; } /* Light Red */
+        .routine:nth-child(9) { background-color: #fff3e0; } /* Light Orange */
+        .routine:nth-child(10) { background-color: #fffde7; } /* Light Yellow */
+        .routine:nth-child(11) { background-color: #e8f5e9; } /* Light Green */
+        .routine:nth-child(12) { background-color: #e3f2fd; } /* Light Blue */
+        .routine:nth-child(13) { background-color: #ede7f6; } /* Light Indigo */
+        .routine:nth-child(14) { background-color: #f3e5f5; } /* Light Violet */
+        .routine:nth-child(15) { background-color: #ffebee; } /* Light Red */
         /* To-dos table styles from provided HTML */
         table { width: 100%; border-collapse: collapse; }
         th, td { border-bottom: 1px solid #ddd; padding: 10px; text-align: left; }
@@ -47,6 +47,9 @@
         button { padding: 8px 15px; background-color: #e83e8c; color: white; border: none; border-radius: 5px; cursor: pointer; }
         button:hover { background-color: #c2255c; }
         .edit-button { margin-right: 5px; }
+        .delete-button { margin-right: 5px; }
+        .up-button { margin-right: 5px; }
+        .down-button { margin-right: 5px; }
         .todos-add-form { display: flex; flex-wrap: wrap; gap: 10px; padding: 10px; }
         .todos-add-form input { flex: 1; min-width: 100px; padding: 8px; border-radius: 5px; border: 1px solid #ccc; }
         .hidden { display: none; }
@@ -250,14 +253,17 @@
                 tdAction.appendChild(editButton);
                 const deleteButton = document.createElement('button');
                 deleteButton.textContent = '삭제';
+                deleteButton.classList.add('delete-button');
                 deleteButton.addEventListener('click', () => deleteTodo(index));
                 tdAction.appendChild(deleteButton);
                 const upButton = document.createElement('button');
                 upButton.textContent = '위';
+                upButton.classList.add('up-button');
                 upButton.addEventListener('click', () => moveTodo(index, 'up'));
                 tdAction.appendChild(upButton);
                 const downButton = document.createElement('button');
                 downButton.textContent = '아래';
+                downButton.classList.add('down-button');
                 downButton.addEventListener('click', () => moveTodo(index, 'down'));
                 tdAction.appendChild(downButton);
                 tr.appendChild(tdTask);
@@ -352,21 +358,30 @@
         const routines = JSON.parse(localStorage.getItem('routines') || '{}');
         if (!routines[dateKey()]) {
             routines[dateKey()] = [
-                { time: '15시', emoji: '❤️', text: 'test', checked: false },
-                { time: '16시', emoji: '🧡', text: 'test', checked: false },
-                { time: '17시', emoji: '💛', text: 'test', checked: false },
-                { time: '18시', emoji: '💚', text: 'test', checked: false },
-                { time: '19시', emoji: '💙', text: 'test', checked: false },
-                { time: '20시', emoji: '💙', text: 'test', checked: false },
-                { time: '21시', emoji: '💜', text: 'test', checked: false },
-                { time: '22시', emoji: '💜', text: 'test', checked: false },
-                { time: '23시', emoji: '🤎', text: 'test', checked: false },
-                { time: '24시', emoji: '🖤', text: 'test', checked: false },
-                { time: '25시', emoji: '🤍', text: 'test', checked: false },
-                { time: '26시', emoji: '🤍', text: 'test', checked: false },
-                { time: '27시', emoji: '💜', text: 'test', checked: false },
-                { time: '28시', emoji: '💛', text: 'test', checked: false },
-                { time: '29시', emoji: '💖', text: 'test', checked: false }
+                { time: '01시', emoji: '❤️', text: 'test', checked: false },
+                { time: '02시', emoji: '🧡', text: 'test', checked: false },
+                { time: '03시', emoji: '💛', text: 'test', checked: false },
+                { time: '04시', emoji: '💚', text: 'test', checked: false },
+                { time: '05시', emoji: '💙', text: 'test', checked: false },
+                { time: '06시', emoji: '💜', text: 'test', checked: false },
+                { time: '07시', emoji: '❤️', text: 'test', checked: false },
+                { time: '08시', emoji: '🧡', text: 'test', checked: false },
+                { time: '09시', emoji: '💛', text: 'test', checked: false },
+                { time: '10시', emoji: '💚', text: 'test', checked: false },
+                { time: '11시', emoji: '💙', text: 'test', checked: false },
+                { time: '12시', emoji: '💜', text: 'test', checked: false },
+                { time: '13시', emoji: '❤️', text: 'test', checked: false },
+                { time: '14시', emoji: '🧡', text: 'test', checked: false },
+                { time: '15시', emoji: '💛', text: 'test', checked: false },
+                { time: '16시', emoji: '💚', text: 'test', checked: false },
+                { time: '17시', emoji: '💙', text: 'test', checked: false },
+                { time: '18시', emoji: '💜', text: 'test', checked: false },
+                { time: '19시', emoji: '❤️', text: 'test', checked: false },
+                { time: '20시', emoji: '🧡', text: 'test', checked: false },
+                { time: '21시', emoji: '💛', text: 'test', checked: false },
+                { time: '22시', emoji: '💚', text: 'test', checked: false },
+                { time: '23시', emoji: '💙', text: 'test', checked: false },
+                { time: '24시', emoji: '💜', text: 'test', checked: false }
             ];
             localStorage.setItem('routines', JSON.stringify(routines));
             loadRoutines();
