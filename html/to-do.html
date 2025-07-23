@@ -43,7 +43,7 @@
         .routine:nth-child(13) { background-color: #ede7f6; } /* Light Indigo */
         .routine:nth-child(14) { background-color: #f3e5f5; } /* Light Violet */
         .routine:nth-child(15) { background-color: #ffebee; } /* Light Red */
-        /* To-dos table styles from provided HTML */
+        /* To-dos table styles */
         table { width: 100%; border-collapse: collapse; }
         th, td { border-bottom: 1px solid #ddd; padding: 10px; text-align: left; }
         .completed { text-decoration: line-through; }
@@ -67,6 +67,44 @@
         .day-cell:hover { background: #f0f0f0; }
         .day-cell.current { background: #e83e8c; color: white; border-radius: 50%; }
         .weekday { text-align: center; font-weight: bold; }
+        /* Reflection styles */
+        #reflectionsSection {
+            margin: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .section {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .section h3 {
+            margin: 0 0 5px 0;
+            font-size: 1.1em;
+            color: #555;
+        }
+        .section textarea {
+            width: 100%;
+            height: 60px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: vertical;
+            font-size: 0.9em;
+            color: #666;
+        }
+        .section textarea::placeholder {
+            color: #999;
+        }
     </style>
 </head>
 <body>
@@ -85,6 +123,7 @@
     <div class="tabs">
         <div class="tab active" onclick="switchTab('routines')">Routines</div>
         <div class="tab" onclick="switchTab('todos')">To-dos</div>
+        <div class="tab" onclick="switchTab('reflections')">Reflections</div>
     </div>
     <div id="routinesSection">
         <div class="routines" id="routinesList"></div>
@@ -115,6 +154,46 @@
             <input id="newStartTime" placeholder="시작시간">
             <input id="newDeadline" placeholder="마감기한">
             <button onclick="addTodo()">등록</button>
+        </div>
+    </div>
+    <div id="reflectionsSection" class="hidden">
+        <div class="container">
+            <div class="section">
+                <h3>Words to self ></h3>
+                <textarea id="wordsToSelf" placeholder="Anything you want to tell yourself?"></textarea>
+            </div>
+            <div class="section">
+                <h3>일어날 수 있는 최고의 시나리오 ></h3>
+                <textarea id="reflection" placeholder="No pressure. Start with one sentence."></textarea>
+            </div>
+            <div class="section">
+                <h3>오늘 달성할 목표 (중요한,긴급한) ></h3>
+                <textarea id="gratitude" placeholder="No pressure. Start with one sentence."></textarea>
+            </div>
+            <div class="section">
+                <h3>개선할 점 ></h3>
+                <textarea id="challenges" placeholder="No pressure. Start with one sentence."></textarea>
+            </div>
+            <div class="section">
+                <h3>오늘 달성한 목표 (중요한, 긴급한) ></h3>
+                <textarea id="plans" placeholder="No pressure. Start with one sentence."></textarea>
+            </div>
+            <div class="section">
+                <h3>나에게 칭찬 및 감사 ></h3>
+                <textarea id="motivation" placeholder="No pressure. Start with one sentence."></textarea>
+            </div>
+            <div class="section">
+                <h3>문제점, 장애물, 실패한이유, 반성 ></h3>
+                <textarea id="reflection2" placeholder="No pressure. Start with one sentence."></textarea>
+            </div>
+            <div class="section">
+                <h3>언제까지, 어떻게, 해결방법, 교훈 ></h3>
+                <textarea id="reflection3" placeholder="No pressure. Start with one sentence."></textarea>
+            </div>
+            <div class="section">
+                <h3>내일 달성할 목표(중요한,긴급한) ></h3>
+                <textarea id="reflection4" placeholder="No pressure. Start with one sentence."></textarea>
+            </div>
         </div>
     </div>
     <div class="bottom-nav">
@@ -249,12 +328,14 @@
             document.querySelector(`.tab[onclick="switchTab('${tab}')"]`).classList.add('active');
             document.getElementById('routinesSection').classList.toggle('hidden', tab !== 'routines');
             document.getElementById('todosSection').classList.toggle('hidden', tab !== 'todos');
+            document.getElementById('reflectionsSection').classList.toggle('hidden', tab !== 'reflections');
         }
 
         function loadItems() {
             loadPinned();
             loadRoutines();
             loadTodos();
+            loadReflections();
         }
 
         function loadPinned() {
@@ -528,10 +609,46 @@
             loadTodos();
         }
 
+        function saveReflections() {
+            const data = {
+                wordsToSelf: document.getElementById('wordsToSelf').value,
+                reflection: document.getElementById('reflection').value,
+                gratitude: document.getElementById('gratitude').value,
+                challenges: document.getElementById('challenges').value,
+                plans: document.getElementById('plans').value,
+                motivation: document.getElementById('motivation').value,
+                reflection2: document.getElementById('reflection2').value,
+                reflection3: document.getElementById('reflection3').value,
+                reflection4: document.getElementById('reflection4').value
+            };
+            const reflections = JSON.parse(localStorage.getItem('reflections') || '{}');
+            reflections[dateKey()] = data;
+            localStorage.setItem('reflections', JSON.stringify(reflections));
+        }
+
+        function loadReflections() {
+            const reflections = JSON.parse(localStorage.getItem('reflections') || '{}');
+            const data = reflections[dateKey()] || {};
+            document.getElementById('wordsToSelf').value = data.wordsToSelf || '';
+            document.getElementById('reflection').value = data.reflection || '';
+            document.getElementById('gratitude').value = data.gratitude || '';
+            document.getElementById('challenges').value = data.challenges || '';
+            document.getElementById('plans').value = data.plans || '';
+            document.getElementById('motivation').value = data.motivation || '';
+            document.getElementById('reflection2').value = data.reflection2 || '';
+            document.getElementById('reflection3').value = data.reflection3 || '';
+            document.getElementById('reflection4').value = data.reflection4 || '';
+        }
+
         // Initial setup
         updateDateDisplay();
         renderCalendar();
         loadItems();
+
+        // Reflection input save
+        document.querySelectorAll('#reflectionsSection textarea').forEach(textarea => {
+            textarea.addEventListener('input', saveReflections);
+        });
 
         // Initial pinned if empty
         const pinned = JSON.parse(localStorage.getItem('pinned') || '{}');
