@@ -1,275 +1,177 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-<meta charset="UTF-8">
-<title>회고</title>
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<style>
-    body {
-        background-color: pink;
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background: url(../img/star.jpg) no-repeat fixed;
-    	background-size: cover;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Reflection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #FFD1DC, #FFE4E6);
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            text-align: center;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .header .date {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+        .header .emoji {
+            font-size: 1.5em;
+        }
+        .section {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        .section h3 {
+            margin: 0 0 5px 0;
+            font-size: 1.1em;
+            color: #555;
+        }
+        .section textarea {
+            width: 100%;
+            height: 60px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: vertical;
+            font-size: 0.9em;
+            color: #666;
+        }
+        .section textarea::placeholder {
+            color: #999;
+        }
+        .nav-btn {
+            background: none;
+            border: none;
+            font-size: 1.2em;
+            cursor: pointer;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const dateElement = document.querySelector('.date');
+            let currentDate = new Date();
+            updateDate();
 
-    form {
-        background-color: #ffffff;
-        border-radius: 10px;
-        width: 600px;
-        margin: 100px auto;
-        padding: 80px;
-        box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
-    }
+            document.querySelector('.nav-btn.prev').addEventListener('click', () => {
+                currentDate.setDate(currentDate.getDate() - 1);
+                updateDate();
+            });
 
-    fieldset {
-        border: none;
-        padding: 0;
-        margin: 0;
-    }
+            document.querySelector('.nav-btn.next').addEventListener('click', () => {
+                currentDate.setDate(currentDate.getDate() + 1);
+                updateDate();
+            });
 
-    legend {
-        font-weight: bold;
-        font-size: 1.2em;
-        color: #333333;
-    }
-
-    label {
-        display: block;
-        margin-bottom: 5px;
-    }
-
-    textarea {
-        width: calc(100% - 20px);
-        height: 80px; /* 높이를 조절할 수 있습니다. */
-        padding: 10px; /* 수정된 부분: 텍스트와 테두리 사이에 간격을 주기 위해 padding 값 수정 */
-        margin-bottom: 10px;
-        border-radius: 5px;
-        border: 1px solid #ced4da;
-        box-sizing: border-box;
-        white-space: pre-line;
-        resize: vertical; /* 수직 크기 조절을 허용합니다. */
-    }
-
-    button {
-        padding: 10px 20px;
-        border: none;
-        background-color: #e83e8c;
-        color: #ffffff;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-
-    button:hover {
-        background-color: #c2255c;
-    }
-
-
-    /* 리스트 아이템 간격 조정 */
-    ol li {
-        margin-bottom: 15px;
-    }
-
-    #retrospectiveList {
-        background-color: #ffffff;
-        border-radius: 10px;
-        width: 600px;
-        margin: 20px auto;
-        padding: 20px;
-        box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
-    }
-
-    #retrospectiveList ul {
-        list-style: none;
-        padding: 0;
-    }
-
-    #retrospectiveList li {
-        margin-bottom: 20px;
-        border-bottom: 1px solid #ced4da;
-        padding-bottom: 10px;
-    }
-
-    #retrospectiveList li:last-child {
-        border-bottom: none;
-    }
-
-    #retrospectiveList h3 {
-        margin: 0 0 10px 0;
-        font-size: 1.1em;
-    }
-
-    #retrospectiveList p {
-        margin: 5px 0;
-    }
-
-    #retrospectiveList button {
-        margin-right: 10px;
-    }
-    
-</style>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script type="text/javascript">
-
-$(document).ready(function() {
-    renderList();
-    $('form').on('submit', function(event) {
-        event.preventDefault();
-        saveRetrospective();
-    });
-});
-
-let editingId = null;
-
-function saveRetrospective() {
-    const done = $('#done').val().trim();
-    const good = $('#good').val().trim();
-    const bad = $('#bad').val().trim();
-    const fix = $('#fix').val().trim();
-    const todo = $('#todo').val().trim();
-
-    if (!done || !good || !bad || !fix || !todo) {
-        alert('모든 필드를 입력해주세요.');
-        return;
-    }
-
-    let retros = getRetrospectives();
-    const now = new Date();
-    const dateStr = now.toLocaleDateString('ko-KR');
-
-    if (editingId) {
-        retros = retros.map(r => {
-            if (r.id === editingId) {
-                return { ...r, done, good, bad, fix, todo };
+            function updateDate() {
+                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                dateElement.textContent = currentDate.toLocaleDateString('ko-KR', options);
+                saveData();
+                loadData();
             }
-            return r;
+
+            function saveData() {
+                const data = {
+                    wordsToSelf: document.getElementById('wordsToSelf').value,
+                    reflection: document.getElementById('reflection').value,
+                    gratitude: document.getElementById('gratitude').value,
+                    challenges: document.getElementById('challenges').value,
+                    plans: document.getElementById('plans').value,
+                    motivation: document.getElementById('motivation').value,
+                    reflection2: document.getElementById('reflection2').value,
+                    reflection3: document.getElementById('reflection3').value,
+                    reflection4: document.getElementById('reflection4').value
+                };
+                localStorage.setItem(currentDate.toDateString(), JSON.stringify(data));
+            }
+
+            function loadData() {
+                const savedData = localStorage.getItem(currentDate.toDateString());
+                if (savedData) {
+                    const data = JSON.parse(savedData);
+                    document.getElementById('wordsToSelf').value = data.wordsToSelf || '';
+                    document.getElementById('reflection').value = data.reflection || '';
+                    document.getElementById('gratitude').value = data.gratitude || '';
+                    document.getElementById('challenges').value = data.challenges || '';
+                    document.getElementById('plans').value = data.plans || '';
+                    document.getElementById('motivation').value = data.motivation || '';
+                    document.getElementById('reflection2').value = data.reflection2 || '';
+                    document.getElementById('reflection3').value = data.reflection3 || '';
+                    document.getElementById('reflection4').value = data.reflection4 || '';
+                } else {
+                    document.querySelectorAll('textarea').forEach(textarea => textarea.value = '');
+                }
+            }
+
+            document.querySelectorAll('textarea').forEach(textarea => {
+                textarea.addEventListener('input', saveData);
+            });
         });
-        alert('수정되었습니다.');
-        $('#submitBtn').text('등록');
-        editingId = null;
-    } else {
-        const newRetro = {
-            id: Date.now(),
-            date: dateStr,
-            done,
-            good,
-            bad,
-            fix,
-            todo
-        };
-        retros.push(newRetro);
-        alert('등록되었습니다.');
-    }
-
-    localStorage.setItem('retrospectives', JSON.stringify(retros));
-    clearForm();
-    renderList();
-}
-
-function getRetrospectives() {
-    return JSON.parse(localStorage.getItem('retrospectives')) || [];
-}
-
-function clearForm() {
-    $('textarea').val('');
-}
-
-function renderList() {
-    const retros = getRetrospectives();
-    if (retros.length === 0) {
-        $('#retrospectiveList').html('<p>등록된 회고가 없습니다.</p>');
-        return;
-    }
-
-    let html = '<ul>';
-    retros.forEach(r => {
-        html += `
-            <li>
-                <h3>${r.date}</h3>
-                <p><strong>오늘 달성한 목표:</strong> ${r.done}</p>
-                <p><strong>나에게 칭찬 및 감사:</strong> ${r.good}</p>
-                <p><strong>문제점, 장애물, 실패한이유, 반성:</strong> ${r.bad}</p>
-                <p><strong>언제까지, 어떻게, 해결방법, 교훈:</strong> ${r.fix}</p>
-                <p><strong>내일 달성할 목표:</strong> ${r.todo}</p>
-                <button onclick="editRetrospective(${r.id})">수정</button>
-                <button onclick="deleteRetrospective(${r.id})">삭제</button>
-            </li>
-        `;
-    });
-    html += '</ul>';
-    $('#retrospectiveList').html(html);
-}
-
-function editRetrospective(id) {
-    const retros = getRetrospectives();
-    const r = retros.find(retro => retro.id === id);
-    if (r) {
-        $('#done').val(r.done);
-        $('#good').val(r.good);
-        $('#bad').val(r.bad);
-        $('#fix').val(r.fix);
-        $('#todo').val(r.todo);
-        editingId = id;
-        $('#submitBtn').text('수정');
-    }
-}
-
-function deleteRetrospective(id) {
-    if (confirm('정말 삭제하시겠습니까?')) {
-        let retros = getRetrospectives().filter(r => r.id !== id);
-        localStorage.setItem('retrospectives', JSON.stringify(retros));
-        renderList();
-        alert('삭제되었습니다.');
-    }
-}
-
-</script>
+    </script>
 </head>
-
 <body>
-
-<form>
-
-    <fieldset>
-        <legend>회고</legend>
-        <ol>
-            <li>
-                <label for="done">오늘 달성한 목표</label>
-                <textarea id="done" name="done" required="required" placeholder="SQL 1장 정독하고 요약하기" autofocus="autofocus"></textarea>
-            </li>
-
-            <li>
-                <label for="good">나에게 칭찬 및 감사</label>
-                <textarea id="good" name="good" required="required" placeholder="너무 어렵고 포기하고 싶지만 참고 버텨냈다! 나의 인내심에 박수를" autofocus="autofocus"></textarea>
-            </li>
-
-            <li>
-                <label for="bad">문제점, 장애물, 실패한이유, 반성</label>
-                <textarea id="bad" name="bad" required="required" placeholder="요즘 운동을 게을리해서 체력이 떨어진 것 같다." autofocus="autofocus"></textarea>
-            </li>
-
-            <li>
-                <label for="fix">언제까지, 어떻게, 해결방법, 교훈</label>
-                <textarea id="fix" name="fix" required="required" placeholder="내일은 꼭 하루만보걷기, 학교계단 걸어서 올라가기" autofocus="autofocus"></textarea>
-            </li>
-            
-            <li>
-                <label for="todo">내일 달성할 목표</label>
-                <textarea id="todo" name="todo" required="required" placeholder="SQL 1장 문제풀이 하기" autofocus="autofocus"></textarea>
-            </li>
-
-        </ol>
-        <button type="submit" id="submitBtn">등록</button>
-    </fieldset>
-
-
-</form>
-
-<div id="retrospectiveList"></div>
-
+    <div class="container">
+        <div class="header">
+            <button class="nav-btn prev"><</button>
+            <span class="date"></span>
+            <button class="nav-btn next">></button>
+            <span class="emoji">🥰</span>
+        </div>
+        <div class="section">
+            <h3>Words to self ></h3>
+            <textarea id="wordsToSelf" placeholder="Anything you want to tell yourself?"></textarea>
+        </div>
+        <div class="section">
+            <h3>일어날 수 있는 최고의 시나리오 ></h3>
+            <textarea id="reflection" placeholder="No pressure. Start with one sentence."></textarea>
+        </div>
+        <div class="section">
+            <h3>오늘 달성할 목표 (중요한,긴급한) ></h3>
+            <textarea id="gratitude" placeholder="No pressure. Start with one sentence."></textarea>
+        </div>
+        <div class="section">
+            <h3>개선할 점 ></h3>
+            <textarea id="challenges" placeholder="No pressure. Start with one sentence."></textarea>
+        </div>
+        <div class="section">
+            <h3>오늘 달성한 목표 (중요한, 긴급한) ></h3>
+            <textarea id="plans" placeholder="No pressure. Start with one sentence."></textarea>
+        </div>
+        <div class="section">
+            <h3>나에게 칭찬 및 감사 ></h3>
+            <textarea id="motivation" placeholder="No pressure. Start with one sentence."></textarea>
+        </div>
+        <div class="section">
+            <h3>문제점, 장애물, 실패한이유, 반성 ></h3>
+            <textarea id="reflection2" placeholder="No pressure. Start with one sentence."></textarea>
+        </div>
+        <div class="section">
+            <h3>언제까지, 어떻게, 해결방법, 교훈 ></h3>
+            <textarea id="reflection3" placeholder="No pressure. Start with one sentence."></textarea>
+        </div>
+        <div class="section">
+            <h3>내일 달성할 목표(중요한,긴급한) ></h3>
+            <textarea id="reflection4" placeholder="No pressure. Start with one sentence."></textarea>
+        </div>
+    </div>
 </body>
 </html>
