@@ -7,15 +7,18 @@
     <style>
         body { font-family: sans-serif; margin: 0; padding: 0; background-color: #f5f5f5; }
         .header { background-color: #e83e8c; color: white; padding: 10px; text-align: center; }
-        .date { text-align: center; padding: 10px; }
+        .date { text-align: center; padding: 10px; cursor: pointer; }
         .calendar { display: flex; justify-content: center; gap: 10px; }
         .day { background-color: #e0e0e0; border-radius: 50%; width: 40px; height: 40px; line-height: 20px; text-align: center; cursor: pointer; }
         .day.active { background-color: #e83e8c; color: white; }
-        .pinned { background-color: #f7d9e8; padding: 10px; margin: 10px; border-radius: 8px; display: flex; align-items: center; }
+        .pinned { padding: 10px; margin: 10px; display: block; }
+        .pinned-item { background-color: #f7d9e8; padding: 10px; margin-bottom: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px; }
         .tabs { display: flex; justify-content: space-around; padding: 10px; }
         .tab { background-color: #e0e0e0; padding: 10px; border-radius: 8px; cursor: pointer; }
         .tab.active { background-color: #e83e8c; color: white; }
         .routines, .todos { margin: 10px; }
+        .routines { max-height: 300px; overflow-y: auto; }
+        .todos { max-height: 300px; overflow-y: auto; }
         .routine { padding: 10px; margin-bottom: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px; }
         .routine button { background: #e83e8c; color: white; border: none; padding: 5px; cursor: pointer; margin-left: 5px; }
         .routine button.delete { background: red; }
@@ -53,14 +56,31 @@
         .todos-add-form { display: flex; flex-wrap: wrap; gap: 10px; padding: 10px; }
         .todos-add-form input { flex: 1; min-width: 100px; padding: 8px; border-radius: 5px; border: 1px solid #ccc; }
         .hidden { display: none; }
+        .pinned-item button { background: #e83e8c; color: white; border: none; padding: 5px; cursor: pointer; margin-left: 5px; }
+        .pinned-item button.delete { background: red; }
+        .pinned-item button:hover { opacity: 0.8; }
+        .calendar-picker { position: absolute; top: 60px; left: 50%; transform: translateX(-50%); background: white; border: 1px solid #e0e0e0; padding: 10px; z-index: 10; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .calendar-header button { background: none; border: none; cursor: pointer; font-size: 16px; }
+        .days-grid { display: grid; grid-template-columns: repeat(7, 30px); gap: 5px; justify-content: center; }
+        .day-cell { text-align: center; padding: 5px; cursor: pointer; }
+        .day-cell:hover { background: #f0f0f0; }
+        .day-cell.current { background: #e83e8c; color: white; border-radius: 50%; }
+        .weekday { text-align: center; font-weight: bold; }
     </style>
 </head>
 <body>
     <div class="header">MyRoutine</div>
-    <div class="date" id="currentDate">Jul 2025 ▼</div>
+    <div class="date" id="currentDate" onclick="toggleCalendarPicker()">Jul 2025 ▼</div>
+    <div id="calendarPicker" class="calendar-picker hidden"></div>
     <div class="calendar" id="calendar"></div>
     <div class="pinned">
-        📍 Xtal Founder/CEO/CTO 
+        <div id="pinnedList"></div>
+        <div class="add-form">
+            <input id="newPinnedEmoji" placeholder="Emoji (e.g., 📍)">
+            <input id="newPinnedText" placeholder="Text">
+            <button onclick="addPinned()">Add Pinned</button>
+        </div>
     </div>
     <div class="tabs">
         <div class="tab active" onclick="switchTab('routines')">Routines</div>
@@ -107,6 +127,7 @@
 
     <script>
         let currentDate = new Date(2025, 6, 23); // July 23, 2025
+        let pickerDate;
         const dateKey = () => currentDate.toISOString().split('T')[0];
 
         function updateDateDisplay() {
@@ -134,6 +155,82 @@
             }
         }
 
+        function toggleCalendarPicker() {
+            const picker = document.getElementById('calendarPicker');
+            if (picker.classList.contains('hidden')) {
+                pickerDate = new Date(currentDate);
+                renderMonthCalendar();
+                picker.classList.remove('hidden');
+            } else {
+                picker.classList.add('hidden');
+            }
+        }
+
+        function renderMonthCalendar() {
+            const picker = document.getElementById('calendarPicker');
+            picker.innerHTML = '';
+
+            // Header
+            const header = document.createElement('div');
+            header.className = 'calendar-header';
+            const prev = document.createElement('button');
+            prev.textContent = '<';
+            prev.onclick = () => changeMonth(-1);
+            const monthTitle = document.createElement('span');
+            monthTitle.textContent = pickerDate.toLocaleString('default', { month: 'long', year: 'numeric' });
+            const next = document.createElement('button');
+            next.textContent = '>';
+            next.onclick = () => changeMonth(1);
+            header.appendChild(prev);
+            header.appendChild(monthTitle);
+            header.appendChild(next);
+            picker.appendChild(header);
+
+            // Weekdays
+            const weekdays = document.createElement('div');
+            weekdays.className = 'days-grid';
+            ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].forEach(day => {
+                const d = document.createElement('div');
+                d.className = 'weekday';
+                d.textContent = day;
+                weekdays.appendChild(d);
+            });
+            picker.appendChild(weekdays);
+
+            // Days
+            const daysGrid = document.createElement('div');
+            daysGrid.className = 'days-grid';
+            const firstDay = new Date(pickerDate.getFullYear(), pickerDate.getMonth(), 1);
+            const lastDay = new Date(pickerDate.getFullYear(), pickerDate.getMonth() + 1, 0);
+            const startDay = firstDay.getDay();
+            for (let i = 0; i < startDay; i++) {
+                const empty = document.createElement('div');
+                daysGrid.appendChild(empty);
+            }
+            for (let d = 1; d <= lastDay.getDate(); d++) {
+                const dayCell = document.createElement('div');
+                dayCell.className = 'day-cell';
+                dayCell.textContent = d;
+                if (d === currentDate.getDate() && pickerDate.getMonth() === currentDate.getMonth() && pickerDate.getFullYear() === currentDate.getFullYear()) {
+                    dayCell.classList.add('current');
+                }
+                dayCell.onclick = () => {
+                    currentDate = new Date(pickerDate.getFullYear(), pickerDate.getMonth(), d);
+                    updateDateDisplay();
+                    renderCalendar();
+                    loadItems();
+                    toggleCalendarPicker();
+                };
+                daysGrid.appendChild(dayCell);
+            }
+            picker.appendChild(daysGrid);
+        }
+
+        function changeMonth(delta) {
+            pickerDate.setMonth(pickerDate.getMonth() + delta);
+            renderMonthCalendar();
+        }
+
         function switchTab(tab) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.querySelector(`.tab[onclick="switchTab('${tab}')"]`).classList.add('active');
@@ -142,8 +239,77 @@
         }
 
         function loadItems() {
+            loadPinned();
             loadRoutines();
             loadTodos();
+        }
+
+        function loadPinned() {
+            const pinned = JSON.parse(localStorage.getItem('pinned') || '{}');
+            const currentPinned = pinned[dateKey()] || [];
+            const list = document.getElementById('pinnedList');
+            list.innerHTML = '';
+            currentPinned.forEach((pin, index) => {
+                const div = document.createElement('div');
+                div.className = 'pinned-item';
+                div.innerHTML = `
+                    <span class="pinned-emoji">${pin.emoji}</span> <span class="pinned-text">${pin.text}</span>
+                    <button onclick="editPinned(${index})">Edit</button>
+                    <button class="delete" onclick="deletePinned(${index})">Delete</button>
+                    <button onclick="movePinned(${index}, 'up')">Up</button>
+                    <button onclick="movePinned(${index}, 'down')">Down</button>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        function addPinned() {
+            const emoji = document.getElementById('newPinnedEmoji').value;
+            const text = document.getElementById('newPinnedText').value;
+            if (!text) return;
+            const pinned = JSON.parse(localStorage.getItem('pinned') || '{}');
+            const currentPinned = pinned[dateKey()] || [];
+            currentPinned.push({ emoji, text });
+            pinned[dateKey()] = currentPinned;
+            localStorage.setItem('pinned', JSON.stringify(pinned));
+            document.getElementById('newPinnedEmoji').value = '';
+            document.getElementById('newPinnedText').value = '';
+            loadPinned();
+        }
+
+        function editPinned(index) {
+            const pinned = JSON.parse(localStorage.getItem('pinned') || '{}');
+            const currentPinned = pinned[dateKey()] || [];
+            const pin = currentPinned[index];
+            const newEmoji = prompt("Emoji 수정:", pin.emoji || '');
+            if (newEmoji !== null) pin.emoji = newEmoji;
+            const newText = prompt("Text 수정:", pin.text || '');
+            if (newText !== null) pin.text = newText;
+            pinned[dateKey()] = currentPinned;
+            localStorage.setItem('pinned', JSON.stringify(pinned));
+            loadPinned();
+        }
+
+        function deletePinned(index) {
+            const pinned = JSON.parse(localStorage.getItem('pinned') || '{}');
+            const currentPinned = pinned[dateKey()] || [];
+            currentPinned.splice(index, 1);
+            pinned[dateKey()] = currentPinned;
+            localStorage.setItem('pinned', JSON.stringify(pinned));
+            loadPinned();
+        }
+
+        function movePinned(index, direction) {
+            const pinned = JSON.parse(localStorage.getItem('pinned') || '{}');
+            const currentPinned = pinned[dateKey()] || [];
+            if (direction === 'up' && index > 0) {
+                [currentPinned[index - 1], currentPinned[index]] = [currentPinned[index], currentPinned[index - 1]];
+            } else if (direction === 'down' && index < currentPinned.length - 1) {
+                [currentPinned[index], currentPinned[index + 1]] = [currentPinned[index + 1], currentPinned[index]];
+            }
+            pinned[dateKey()] = currentPinned;
+            localStorage.setItem('pinned', JSON.stringify(pinned));
+            loadPinned();
         }
 
         function loadRoutines() {
@@ -353,6 +519,16 @@
         updateDateDisplay();
         renderCalendar();
         loadItems();
+
+        // Initial pinned if empty
+        const pinned = JSON.parse(localStorage.getItem('pinned') || '{}');
+        if (!pinned[dateKey()]) {
+            pinned[dateKey()] = [
+                { emoji: '📍', text: 'Xtal Founder/CEO/CTO' }
+            ];
+            localStorage.setItem('pinned', JSON.stringify(pinned));
+            loadPinned();
+        }
 
         // Initial routines if empty
         const routines = JSON.parse(localStorage.getItem('routines') || '{}');
