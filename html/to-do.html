@@ -23,7 +23,16 @@
         .routine button { background: #e83e8c; color: white; border: none; padding: 5px; cursor: pointer; margin-left: 5px; }
         .routine button.delete { background: red; }
         .routine button:hover { opacity: 0.8; }
-        .add-form { padding: 10px; display: flex; flex-direction: column; gap: 10px; }
+        #routinesSection .add-form { 
+            padding: 10px; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 10px; 
+            position: sticky; 
+            bottom: 0; 
+            background-color: #f5f5f5; 
+            z-index: 1; 
+        }
         .add-form input { padding: 10px; }
         .add-form button { background-color: #e83e8c; color: white; border: none; padding: 10px; cursor: pointer; }
         .bottom-nav { position: fixed; bottom: 0; width: 100%; background-color: white; display: flex; justify-content: space-around; padding: 10px; border-top: 1px solid #e0e0e0; }
@@ -443,7 +452,10 @@
             document.getElementById('newTime').value = '';
             document.getElementById('newEmoji').value = '';
             document.getElementById('newText').value = '';
+            const routinesList = document.getElementById('routinesList');
+            const scrollPosition = routinesList.scrollTop;
             loadRoutines();
+            routinesList.scrollTop = scrollPosition;
         }
 
         function toggleRoutineCheck(index) {
@@ -452,7 +464,10 @@
             currentRoutines[index].checked = !currentRoutines[index].checked;
             routines[dateKey()] = currentRoutines;
             localStorage.setItem('routines', JSON.stringify(routines));
+            const routinesList = document.getElementById('routinesList');
+            const scrollPosition = routinesList.scrollTop;
             loadRoutines();
+            routinesList.scrollTop = scrollPosition;
         }
 
         function editRoutine(index) {
@@ -467,7 +482,10 @@
             if (newText !== null) routine.text = newText;
             routines[dateKey()] = currentRoutines;
             localStorage.setItem('routines', JSON.stringify(routines));
+            const routinesList = document.getElementById('routinesList');
+            const scrollPosition = routinesList.scrollTop;
             loadRoutines();
+            routinesList.scrollTop = scrollPosition;
         }
 
         function deleteRoutine(index) {
@@ -476,7 +494,10 @@
             currentRoutines.splice(index, 1);
             routines[dateKey()] = currentRoutines;
             localStorage.setItem('routines', JSON.stringify(routines));
+            const routinesList = document.getElementById('routinesList');
+            const scrollPosition = routinesList.scrollTop;
             loadRoutines();
+            routinesList.scrollTop = scrollPosition;
         }
 
         function moveRoutine(index, direction) {
@@ -489,7 +510,10 @@
             }
             routines[dateKey()] = currentRoutines;
             localStorage.setItem('routines', JSON.stringify(routines));
+            const routinesList = document.getElementById('routinesList');
+            const scrollPosition = routinesList.scrollTop;
             loadRoutines();
+            routinesList.scrollTop = scrollPosition;
         }
 
         function loadTodos() {
