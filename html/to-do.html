@@ -1,175 +1,376 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-<meta charset="UTF-8">
-<title>해야할일</title>
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<style>
-body {
-    background: url(../img/star.jpg) no-repeat fixed;
-   	background-size: cover;
-    font-family: Arial, sans-serif;
-    background-color: pink; /* 분홍색으로 변경 */
-    margin: 0;
-    padding: 0;
-}
-
-.container {
-    max-width: 800px; /* 넓이 조정 */
-    margin: 20px auto;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-}
-
-.header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 20px; /* 간격 추가 */
-}
-
-h1 {
-    margin: 0;
-    font-size: 24px;
-}
-
-input[type="text"] {
-    padding: 8px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    width: calc(70% - 10px); /* 넓이 조정 */
-    margin-right: 10px;
-}
-
-button {
-    padding: 8px 15px;
-    background-color: #e83e8c;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #c2255c;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-th, td {
-    border-bottom: 1px solid #ddd;
-    padding: 10px;
-    text-align: left;
-}
-
-.completed {
-    text-decoration: line-through;
-}
-
-.placeholder {
-    background-color: #f2f2f2 !important;
-}
-
-.task-input {
-    width: 100%; /* 넓이 조정 */
-    margin-bottom: 10px; /* 간격 추가 */
-    overflow-y: auto; /* 세로 방향으로 넘치는 경우 스크롤바 표시 */
-    max-height: 100px; /* 최대 높이 설정 */
-}
-
-/* 수정 버튼 왼쪽으로 이동 */
-.edit-button {
-    margin-right: 5px;
-}
-
-</style>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-<script type="text/javascript">
-function addTask() {
-    var taskInput = document.getElementById("taskInput");
-    var taskList = document.querySelector("#taskList tbody");
-
-    if (taskInput.value.trim() === "") {
-        alert("할 일을 입력하세요!");
-        return;
-    }
-
-    var tr = document.createElement("tr");
-    
-    var tdTask = document.createElement("td");
-    var checkBox = document.createElement("input");
-    checkBox.type = "checkbox";
-    checkBox.onclick = function() {
-        tdTask.classList.toggle("completed");
-    };
-    tdTask.appendChild(checkBox);
-    var label = document.createElement("label");
-    label.textContent = taskInput.value;
-    tdTask.appendChild(label);
-
-    var tdAction = document.createElement("td");
-
-    // 수정 버튼 왼쪽에 추가
-    var editButton = document.createElement("button");
-    editButton.textContent = "수정";
-    editButton.classList.add("edit-button");
-    editButton.onclick = function() {
-        var newText = prompt("수정할 내용을 입력하세요:", label.textContent);
-        if (newText !== null) {
-            label.textContent = newText;
-        }
-    };
-    tdAction.appendChild(editButton);
-
-    var deleteButton = document.createElement("button");
-    deleteButton.textContent = "삭제";
-    deleteButton.onclick = function() {
-        taskList.removeChild(tr);
-    };
-    tdAction.appendChild(deleteButton);
-
-    tr.appendChild(tdTask);
-    tr.appendChild(tdAction);
-    taskList.appendChild(tr);
-
-    taskInput.value = "";
-
-    // Enable drag and drop
-    $("#taskList tbody").sortable({
-        placeholder: "placeholder",
-        axis: "y",
-        handle: "label",
-        cursor: "grabbing"
-    });
-}
-</script>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyRoutine</title>
+    <style>
+        body { font-family: sans-serif; margin: 0; padding: 0; background-color: #f5f5f5; }
+        .header { background-color: #ff9500; color: white; padding: 10px; text-align: center; }
+        .date { text-align: center; padding: 10px; }
+        .calendar { display: flex; justify-content: center; gap: 10px; }
+        .day { background-color: #e0e0e0; border-radius: 50%; width: 40px; height: 40px; line-height: 20px; text-align: center; cursor: pointer; }
+        .day.active { background-color: #4cd964; color: white; }
+        .pinned { background-color: #d9f7d9; padding: 10px; margin: 10px; border-radius: 8px; display: flex; align-items: center; }
+        .tabs { display: flex; justify-content: space-around; padding: 10px; }
+        .tab { background-color: #e0e0e0; padding: 10px; border-radius: 8px; cursor: pointer; }
+        .tab.active { background-color: #4cd964; color: white; }
+        .routines, .todos { margin: 10px; }
+        .routine { padding: 10px; margin-bottom: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px; }
+        .routine button { background: #e83e8c; color: white; border: none; padding: 5px; cursor: pointer; margin-left: 5px; }
+        .routine button.delete { background: red; }
+        .routine button:hover { opacity: 0.8; }
+        .add-form { padding: 10px; display: flex; flex-direction: column; gap: 10px; }
+        .add-form input { padding: 10px; }
+        .add-form button { background-color: #4cd964; color: white; border: none; padding: 10px; cursor: pointer; }
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; background-color: white; display: flex; justify-content: space-around; padding: 10px; border-top: 1px solid #e0e0e0; }
+        /* Gradient colors for routines */
+        .routine:nth-child(1) { background-color: #fff9c4; }
+        .routine:nth-child(2) { background-color: #ffe0b2; }
+        .routine:nth-child(3) { background-color: #fff59d; }
+        .routine:nth-child(4) { background-color: #dcedc8; }
+        .routine:nth-child(5) { background-color: #b3e5fc; }
+        .routine:nth-child(6) { background-color: #9fa8da; }
+        .routine:nth-child(7) { background-color: #ce93d8; }
+        .routine:nth-child(8) { background-color: #f48fb1; }
+        .routine:nth-child(9) { background-color: #bcaaa4; }
+        .routine:nth-child(10) { background-color: #e57373; }
+        .routine:nth-child(11) { background-color: #eeeeee; }
+        .routine:nth-child(12) { background-color: #f5f5f5; }
+        .routine:nth-child(13) { background-color: #e1bee7; }
+        .routine:nth-child(14) { background-color: #fffde7; }
+        .routine:nth-child(15) { background-color: #f8bbd0; }
+        /* To-dos table styles from provided HTML */
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border-bottom: 1px solid #ddd; padding: 10px; text-align: left; }
+        .completed { text-decoration: line-through; }
+        button { padding: 8px 15px; background-color: #e83e8c; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background-color: #c2255c; }
+        .edit-button { margin-right: 5px; }
+        .todos-add-form { display: flex; flex-wrap: wrap; gap: 10px; padding: 10px; }
+        .todos-add-form input { flex: 1; min-width: 100px; padding: 8px; border-radius: 5px; border: 1px solid #ccc; }
+        .hidden { display: none; }
+    </style>
 </head>
 <body>
-<div class="container">
-    <div class="header">
-        <h1>To-Do List</h1>
-        <input type="text" id="taskInput" class="task-input" placeholder="할 일을 입력하세요!">
-        <button onclick="addTask()">등록</button>
+    <div class="header">MyRoutine</div>
+    <div class="date" id="currentDate">Jul 2025 ▼</div>
+    <div class="calendar" id="calendar"></div>
+    <div class="pinned">
+        📍 Xtal Founder/CEO/CTO 
     </div>
-    <table id="taskList">
-        <thead>
-            <tr>
-                <th>중요긴급 - 우선순위 - 해야할일 - 예상소요시간 - 시작시간 - 마감기한</th>
-                <th>수정　　삭제</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
-</div>
+    <div class="tabs">
+        <div class="tab active" onclick="switchTab('routines')">Routines</div>
+        <div class="tab" onclick="switchTab('todos')">To-dos</div>
+    </div>
+    <div id="routinesSection">
+        <div class="routines" id="routinesList"></div>
+        <div class="add-form">
+            <input id="newTime" placeholder="Time (e.g., 19시)">
+            <input id="newEmoji" placeholder="Emoji (e.g., ❤️)">
+            <input id="newText" placeholder="Text">
+            <button onclick="addRoutine()">Add Routine</button>
+        </div>
+    </div>
+    <div id="todosSection" class="hidden">
+        <div class="todos">
+            <table id="taskList">
+                <thead>
+                    <tr>
+                        <th>중요긴급 - 우선순위 - 해야할일 - 예상소요시간 - 시작시간 - 마감기한</th>
+                        <th>수정　　삭제　　위　　아래</th>
+                    </tr>
+                </thead>
+                <tbody id="todosBody"></tbody>
+            </table>
+        </div>
+        <div class="todos-add-form">
+            <input id="newImportance" placeholder="중요긴급">
+            <input id="newPriority" placeholder="우선순위">
+            <input id="newTask" placeholder="해야할일">
+            <input id="newEstimatedTime" placeholder="예상소요시간">
+            <input id="newStartTime" placeholder="시작시간">
+            <input id="newDeadline" placeholder="마감기한">
+            <button onclick="addTodo()">등록</button>
+        </div>
+    </div>
+    <div class="bottom-nav">
+        <button>Home</button>
+        <button>Statistics</button>
+        <button>Discover</button>
+        <button>Social</button>
+        <button>MY</button>
+    </div>
 
+    <script>
+        let currentDate = new Date(2025, 6, 23); // July 23, 2025
+        const dateKey = () => currentDate.toISOString().split('T')[0];
+
+        function updateDateDisplay() {
+            const month = currentDate.toLocaleString('default', { month: 'short' });
+            document.getElementById('currentDate').textContent = `${month} ${currentDate.getFullYear()} ▼`;
+        }
+
+        function renderCalendar() {
+            const calendar = document.getElementById('calendar');
+            calendar.innerHTML = '';
+            const start = new Date(currentDate);
+            start.setDate(start.getDate() - start.getDay());
+            for (let i = 0; i < 7; i++) {
+                const day = new Date(start);
+                day.setDate(day.getDate() + i);
+                const div = document.createElement('div');
+                div.className = 'day' + (day.toDateString() === currentDate.toDateString() ? ' active' : '');
+                div.innerHTML = `${day.toLocaleString('default', { weekday: 'short' })}<br>${day.getDate()}`;
+                div.onclick = () => {
+                    currentDate = day;
+                    updateDateDisplay();
+                    loadItems();
+                };
+                calendar.appendChild(div);
+            }
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelector(`.tab[onclick="switchTab('${tab}')"]`).classList.add('active');
+            document.getElementById('routinesSection').classList.toggle('hidden', tab !== 'routines');
+            document.getElementById('todosSection').classList.toggle('hidden', tab !== 'todos');
+        }
+
+        function loadItems() {
+            loadRoutines();
+            loadTodos();
+        }
+
+        function loadRoutines() {
+            const routines = JSON.parse(localStorage.getItem('routines') || '{}');
+            const currentRoutines = routines[dateKey()] || [];
+            const list = document.getElementById('routinesList');
+            list.innerHTML = '';
+            currentRoutines.forEach((routine, index) => {
+                const div = document.createElement('div');
+                div.className = 'routine';
+                div.innerHTML = `
+                    <input type="checkbox" ${routine.checked ? 'checked' : ''} onchange="toggleRoutineCheck(${index})">
+                    <span class="routine-time">${routine.time}</span> <span class="routine-emoji">${routine.emoji}</span> <span class="routine-text">${routine.text}</span>
+                    <button onclick="editRoutine(${index})">Edit</button>
+                    <button class="delete" onclick="deleteRoutine(${index})">Delete</button>
+                    <button onclick="moveRoutine(${index}, 'up')">Up</button>
+                    <button onclick="moveRoutine(${index}, 'down')">Down</button>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        function addRoutine() {
+            const time = document.getElementById('newTime').value;
+            const emoji = document.getElementById('newEmoji').value;
+            const text = document.getElementById('newText').value;
+            if (!time || !text) return;
+            const routines = JSON.parse(localStorage.getItem('routines') || '{}');
+            const currentRoutines = routines[dateKey()] || [];
+            currentRoutines.push({ time, emoji, text, checked: false });
+            routines[dateKey()] = currentRoutines;
+            localStorage.setItem('routines', JSON.stringify(routines));
+            document.getElementById('newTime').value = '';
+            document.getElementById('newEmoji').value = '';
+            document.getElementById('newText').value = '';
+            loadRoutines();
+        }
+
+        function toggleRoutineCheck(index) {
+            const routines = JSON.parse(localStorage.getItem('routines') || '{}');
+            const currentRoutines = routines[dateKey()] || [];
+            currentRoutines[index].checked = !currentRoutines[index].checked;
+            routines[dateKey()] = currentRoutines;
+            localStorage.setItem('routines', JSON.stringify(routines));
+            loadRoutines();
+        }
+
+        function editRoutine(index) {
+            const routines = JSON.parse(localStorage.getItem('routines') || '{}');
+            const currentRoutines = routines[dateKey()] || [];
+            const routine = currentRoutines[index];
+            const newTime = prompt("Time 수정:", routine.time || '');
+            if (newTime !== null) routine.time = newTime;
+            const newEmoji = prompt("Emoji 수정:", routine.emoji || '');
+            if (newEmoji !== null) routine.emoji = newEmoji;
+            const newText = prompt("Text 수정:", routine.text || '');
+            if (newText !== null) routine.text = newText;
+            routines[dateKey()] = currentRoutines;
+            localStorage.setItem('routines', JSON.stringify(routines));
+            loadRoutines();
+        }
+
+        function deleteRoutine(index) {
+            const routines = JSON.parse(localStorage.getItem('routines') || '{}');
+            const currentRoutines = routines[dateKey()] || [];
+            currentRoutines.splice(index, 1);
+            routines[dateKey()] = currentRoutines;
+            localStorage.setItem('routines', JSON.stringify(routines));
+            loadRoutines();
+        }
+
+        function moveRoutine(index, direction) {
+            const routines = JSON.parse(localStorage.getItem('routines') || '{}');
+            const currentRoutines = routines[dateKey()] || [];
+            if (direction === 'up' && index > 0) {
+                [currentRoutines[index - 1], currentRoutines[index]] = [currentRoutines[index], currentRoutines[index - 1]];
+            } else if (direction === 'down' && index < currentRoutines.length - 1) {
+                [currentRoutines[index], currentRoutines[index + 1]] = [currentRoutines[index + 1], currentRoutines[index]];
+            }
+            routines[dateKey()] = currentRoutines;
+            localStorage.setItem('routines', JSON.stringify(routines));
+            loadRoutines();
+        }
+
+        function loadTodos() {
+            const todos = JSON.parse(localStorage.getItem('todos') || '{}');
+            const currentTodos = todos[dateKey()] || [];
+            const tbody = document.getElementById('todosBody');
+            tbody.innerHTML = '';
+            currentTodos.forEach((todo, index) => {
+                const tr = document.createElement('tr');
+                const tdTask = document.createElement('td');
+                const checkBox = document.createElement('input');
+                checkBox.type = 'checkbox';
+                checkBox.checked = todo.checked;
+                checkBox.onchange = () => toggleTodoCheck(index);
+                tdTask.appendChild(checkBox);
+                const label = document.createElement('span');
+                label.innerHTML = `<span class="todo-importance">${todo.importance || ''}</span> - <span class="todo-priority">${todo.priority || ''}</span> - <span class="todo-task">${todo.task || ''}</span> - <span class="todo-estimatedTime">${todo.estimatedTime || ''}</span> - <span class="todo-startTime">${todo.startTime || ''}</span> - <span class="todo-deadline">${todo.deadline || ''}</span>`;
+                if (todo.checked) label.classList.add('completed');
+                tdTask.appendChild(label);
+                const tdAction = document.createElement('td');
+                const editButton = document.createElement('button');
+                editButton.textContent = '수정';
+                editButton.classList.add('edit-button');
+                editButton.addEventListener('click', () => editTodo(index));
+                tdAction.appendChild(editButton);
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = '삭제';
+                deleteButton.addEventListener('click', () => deleteTodo(index));
+                tdAction.appendChild(deleteButton);
+                const upButton = document.createElement('button');
+                upButton.textContent = '위';
+                upButton.addEventListener('click', () => moveTodo(index, 'up'));
+                tdAction.appendChild(upButton);
+                const downButton = document.createElement('button');
+                downButton.textContent = '아래';
+                downButton.addEventListener('click', () => moveTodo(index, 'down'));
+                tdAction.appendChild(downButton);
+                tr.appendChild(tdTask);
+                tr.appendChild(tdAction);
+                tbody.appendChild(tr);
+            });
+        }
+
+        function addTodo() {
+            const importance = document.getElementById('newImportance').value;
+            const priority = document.getElementById('newPriority').value;
+            const task = document.getElementById('newTask').value;
+            const estimatedTime = document.getElementById('newEstimatedTime').value;
+            const startTime = document.getElementById('newStartTime').value;
+            const deadline = document.getElementById('newDeadline').value;
+            if (!task) {
+                alert("해야할일을 입력하세요!");
+                return;
+            }
+            const todos = JSON.parse(localStorage.getItem('todos') || '{}');
+            const currentTodos = todos[dateKey()] || [];
+            currentTodos.push({ importance, priority, task, estimatedTime, startTime, deadline, checked: false });
+            todos[dateKey()] = currentTodos;
+            localStorage.setItem('todos', JSON.stringify(todos));
+            document.getElementById('newImportance').value = '';
+            document.getElementById('newPriority').value = '';
+            document.getElementById('newTask').value = '';
+            document.getElementById('newEstimatedTime').value = '';
+            document.getElementById('newStartTime').value = '';
+            document.getElementById('newDeadline').value = '';
+            loadTodos();
+        }
+
+        function toggleTodoCheck(index) {
+            const todos = JSON.parse(localStorage.getItem('todos') || '{}');
+            const currentTodos = todos[dateKey()] || [];
+            currentTodos[index].checked = !currentTodos[index].checked;
+            todos[dateKey()] = currentTodos;
+            localStorage.setItem('todos', JSON.stringify(todos));
+            loadTodos();
+        }
+
+        function deleteTodo(index) {
+            const todos = JSON.parse(localStorage.getItem('todos') || '{}');
+            const currentTodos = todos[dateKey()] || [];
+            currentTodos.splice(index, 1);
+            todos[dateKey()] = currentTodos;
+            localStorage.setItem('todos', JSON.stringify(todos));
+            loadTodos();
+        }
+
+        function editTodo(index) {
+            const todos = JSON.parse(localStorage.getItem('todos') || '{}');
+            const currentTodos = todos[dateKey()] || [];
+            const todo = currentTodos[index];
+            const newImportance = prompt("중요긴급 수정:", todo.importance || '');
+            if (newImportance !== null) todo.importance = newImportance;
+            const newPriority = prompt("우선순위 수정:", todo.priority || '');
+            if (newPriority !== null) todo.priority = newPriority;
+            const newTask = prompt("해야할일 수정:", todo.task || '');
+            if (newTask !== null) todo.task = newTask;
+            const newEstimatedTime = prompt("예상소요시간 수정:", todo.estimatedTime || '');
+            if (newEstimatedTime !== null) todo.estimatedTime = newEstimatedTime;
+            const newStartTime = prompt("시작시간 수정:", todo.startTime || '');
+            if (newStartTime !== null) todo.startTime = newStartTime;
+            const newDeadline = prompt("마감기한 수정:", todo.deadline || '');
+            if (newDeadline !== null) todo.deadline = newDeadline;
+            todos[dateKey()] = currentTodos;
+            localStorage.setItem('todos', JSON.stringify(todos));
+            loadTodos();
+        }
+
+        function moveTodo(index, direction) {
+            const todos = JSON.parse(localStorage.getItem('todos') || '{}');
+            const currentTodos = todos[dateKey()] || [];
+            if (direction === 'up' && index > 0) {
+                [currentTodos[index - 1], currentTodos[index]] = [currentTodos[index], currentTodos[index - 1]];
+            } else if (direction === 'down' && index < currentTodos.length - 1) {
+                [currentTodos[index], currentTodos[index + 1]] = [currentTodos[index + 1], currentTodos[index]];
+            }
+            todos[dateKey()] = currentTodos;
+            localStorage.setItem('todos', JSON.stringify(todos));
+            loadTodos();
+        }
+
+        // Initial setup
+        updateDateDisplay();
+        renderCalendar();
+        loadItems();
+
+        // Initial routines if empty
+        const routines = JSON.parse(localStorage.getItem('routines') || '{}');
+        if (!routines[dateKey()]) {
+            routines[dateKey()] = [
+                { time: '15시', emoji: '❤️', text: 'test', checked: false },
+                { time: '16시', emoji: '🧡', text: 'test', checked: false },
+                { time: '17시', emoji: '💛', text: 'test', checked: false },
+                { time: '18시', emoji: '💚', text: 'test', checked: false },
+                { time: '19시', emoji: '💙', text: 'test', checked: false },
+                { time: '20시', emoji: '💙', text: 'test', checked: false },
+                { time: '21시', emoji: '💜', text: 'test', checked: false },
+                { time: '22시', emoji: '💜', text: 'test', checked: false },
+                { time: '23시', emoji: '🤎', text: 'test', checked: false },
+                { time: '24시', emoji: '🖤', text: 'test', checked: false },
+                { time: '25시', emoji: '🤍', text: 'test', checked: false },
+                { time: '26시', emoji: '🤍', text: 'test', checked: false },
+                { time: '27시', emoji: '💜', text: 'test', checked: false },
+                { time: '28시', emoji: '💛', text: 'test', checked: false },
+                { time: '29시', emoji: '💖', text: 'test', checked: false }
+            ];
+            localStorage.setItem('routines', JSON.stringify(routines));
+            loadRoutines();
+        }
+    </script>
 </body>
 </html>
