@@ -122,15 +122,47 @@
                     cell.dataset.day = day;
 
                     // Load saved data into cell
-                    if (savedData[`${hour}-${day}`]) {
-                        cell.textContent = savedData[`${hour}-${day}`];
+                    const key = `${hour}-${day}`;
+                    if (savedData[key]) {
+                        cell.textContent = savedData[key].text || "";
+                        if (savedData[key].color) {
+                            cell.style.backgroundColor = savedData[key].color;
+                        }
                     }
 
-                    // Save data on input
+                    // Save text on input
                     cell.addEventListener("input", function() {
                         const data = loadTableData();
-                        data[`${this.dataset.hour}-${this.dataset.day}`] = this.textContent;
+                        const key = `${this.dataset.hour}-${this.dataset.day}`;
+                        if (!data[key]) data[key] = {};
+                        data[key].text = this.textContent;
                         saveTableData(data);
+                    });
+
+                    // Handle color change on context menu (right-click)
+                    cell.addEventListener("contextmenu", function(e) {
+                        e.preventDefault();
+                        const colorInput = document.createElement("input");
+                        colorInput.type = "color";
+                        colorInput.style.position = "absolute";
+                        colorInput.style.left = "-9999px"; // Hide off-screen
+                        document.body.appendChild(colorInput);
+                        colorInput.click();
+
+                        colorInput.addEventListener("input", () => {
+                            this.style.backgroundColor = colorInput.value;
+                            const data = loadTableData();
+                            const key = `${this.dataset.hour}-${this.dataset.day}`;
+                            if (!data[key]) data[key] = {};
+                            data[key].color = colorInput.value;
+                            saveTableData(data);
+                            document.body.removeChild(colorInput);
+                        });
+
+                        // Clean up if no change
+                        colorInput.addEventListener("blur", () => {
+                            document.body.removeChild(colorInput);
+                        });
                     });
 
                     // Handle arrow key navigation
