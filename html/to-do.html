@@ -9,7 +9,7 @@
             font-family: sans-serif;
             margin: 0;
             padding: 0;
-            padding-bottom: 60px; /* Space for bottom-nav */
+            padding-bottom: 60px;
             background-color: #f5f5f5;
         }
         .header {
@@ -98,25 +98,25 @@
             gap: 10px;
         }
         .routine.red {
-            background-color: rgba(255, 160, 180, 0.4); /* More saturated pastel red */
+            background-color: rgba(255, 160, 180, 0.4);
         }
         .routine.orange {
-            background-color: rgba(255, 180, 100, 0.4); /* More saturated pastel orange */
+            background-color: rgba(255, 180, 100, 0.4);
         }
         .routine.yellow {
-            background-color: rgba(255, 230, 100, 0.4); /* More saturated pastel yellow */
+            background-color: rgba(255, 230, 100, 0.4);
         }
         .routine.green {
-            background-color: rgba(150, 255, 150, 0.4); /* More saturated pastel green */
+            background-color: rgba(150, 255, 150, 0.4);
         }
         .routine.blue {
-            background-color: rgba(100, 200, 255, 0.4); /* More saturated pastel blue */
+            background-color: rgba(100, 200, 255, 0.4);
         }
         .routine.indigo {
-            background-color: rgba(150, 150, 255, 0.4); /* More saturated pastel indigo */
+            background-color: rgba(150, 150, 255, 0.4);
         }
         .routine.violet {
-            background-color: rgba(200, 150, 255, 0.4); /* More saturated pastel violet */
+            background-color: rgba(200, 150, 255, 0.4);
         }
         .routine button {
             background: #e83e8c;
@@ -176,16 +176,7 @@
         button:hover {
             background-color: #c2255c;
         }
-        .edit-button {
-            margin-right: 5px;
-        }
-        .delete-button {
-            margin-right: 5px;
-        }
-        .up-button {
-            margin-right: 5px;
-        }
-        .down-button {
+        .edit-button, .delete-button, .up-button, .down-button {
             margin-right: 5px;
         }
         .next-button {
@@ -275,31 +266,29 @@
             text-align: center;
             font-weight: bold;
         }
-        /* Reflection styles */
         #reflectionsSection {
             margin: 10px;
             max-height: 500px;
             overflow-y: auto;
         }
-        .section .next-button {
-            margin-top: 10px;
-        }
-        /* Priority styles */
-        #prioritySection {
-            margin: 10px;
-            max-height: 500px;
-            overflow-y: auto;
-        }
         .container {
-            background: #fff;
-            padding: 10px;
-            border-radius: 8px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
             width: 100%;
             box-sizing: border-box;
+            padding: 0;
+            background: none;
+            border-radius: 0;
         }
         .section {
-            margin-bottom: 15px;
-            text-align: left;
+            flex: 1;
+            min-width: 300px;
+            padding: 5px;
+            border-radius: 8px;
+            box-sizing: border-box;
+            background-color: #f7d9e8;
+            margin-bottom: 0;
         }
         .section h3 {
             margin: 0 0 5px 0;
@@ -308,7 +297,7 @@
         }
         .section textarea {
             width: 100%;
-            height: 60px;
+            height: 120px;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
@@ -323,6 +312,14 @@
         .section textarea:focus {
             outline: 4px solid #c2255c;
         }
+        .section .next-button {
+            margin-top: 10px;
+        }
+        #prioritySection {
+            margin: 10px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
         .priority-container {
             display: flex;
             flex-wrap: wrap;
@@ -331,7 +328,7 @@
             box-sizing: border-box;
         }
         .priority-container:first-child {
-            margin-bottom: 15px; /* Slight vertical spacing between quadrant pairs */
+            margin-bottom: 15px;
         }
         .quadrant {
             flex: 1;
@@ -339,7 +336,7 @@
             padding: 5px;
             border-radius: 8px;
             box-sizing: border-box;
-            background-color: #f7d9e8; /* Matches bucketlist-item */
+            background-color: #f7d9e8;
         }
         .quadrant h2 {
             margin: 0 0 5px 0;
@@ -374,7 +371,6 @@
         .quadrant .next-button {
             margin-top: 10px;
         }
-        /* Bucket List styles */
         #bucketlistSection {
             margin: 10px;
             max-height: 500px;
@@ -392,7 +388,7 @@
             min-width: 300px;
             padding: 10px;
             border-radius: 8px;
-            background-color: #f7d9e8; /* Matches pinned-item */
+            background-color: #f7d9e8;
             box-sizing: border-box;
         }
         .bucketlist-item h2 {
@@ -414,7 +410,7 @@
             height: 40px;
         }
         .bucketlist-item textarea {
-            height: 120px; /* Doubled from 60px */
+            height: 120px;
             resize: vertical;
         }
         .bucketlist-item input::placeholder,
@@ -428,7 +424,6 @@
         .bucketlist-item .next-button {
             margin-top: 10px;
         }
-        /* To-do styles */
         .todo-item {
             padding: 10px;
             margin-bottom: 10px;
@@ -436,7 +431,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            background-color: #f7d9e8; /* Default background */
+            background-color: #f7d9e8;
         }
         .todo-item.new {
             background: linear-gradient(90deg, rgba(255, 160, 180, 0.4), rgba(255, 180, 100, 0.4), rgba(255, 230, 100, 0.4), rgba(150, 255, 150, 0.4), rgba(100, 200, 255, 0.4), rgba(150, 150, 255, 0.4), rgba(200, 150, 255, 0.4));
@@ -607,7 +602,7 @@
     </div>
 
     <script>
-        let currentDate = new Date(); // Set to today's date
+        let currentDate = new Date();
         let pickerDate;
         const dateKey = () => currentDate.toISOString().split('T')[0];
 
@@ -662,8 +657,6 @@
         function renderMonthCalendar() {
             const picker = document.getElementById('calendarPicker');
             picker.innerHTML = '';
-
-            // Header
             const header = document.createElement('div');
             header.className = 'calendar-header';
             const prevYear = document.createElement('button');
@@ -686,8 +679,6 @@
             header.appendChild(nextMonth);
             header.appendChild(nextYear);
             picker.appendChild(header);
-
-            // Weekdays
             const weekdays = document.createElement('div');
             weekdays.className = 'days-grid';
             ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].forEach(day => {
@@ -697,8 +688,6 @@
                 weekdays.appendChild(d);
             });
             picker.appendChild(weekdays);
-
-            // Days
             const daysGrid = document.createElement('div');
             daysGrid.className = 'days-grid';
             const firstDay = new Date(pickerDate.getFullYear(), pickerDate.getMonth(), 1);
@@ -1348,12 +1337,10 @@
             alert(`Bucket List Item 3 copied to ${nextDateKey}`);
         }
 
-        // Initial setup
         updateDateDisplay();
         renderCalendar();
         loadItems();
 
-        // Reflection, Priority, and Bucket List input save
         document.querySelectorAll('#reflectionsSection textarea, #prioritySection textarea, #bucketlistSection input, #bucketlistSection textarea').forEach(input => {
             input.addEventListener('input', () => {
                 if (input.closest('#reflectionsSection')) {
@@ -1366,7 +1353,6 @@
             });
         });
 
-        // Initial pinned if empty
         const pinned = JSON.parse(localStorage.getItem('pinned') || '{}');
         if (!pinned[dateKey()]) {
             pinned[dateKey()] = [
@@ -1376,7 +1362,6 @@
             loadPinned();
         }
 
-        // Initial routines if empty
         const routines = JSON.parse(localStorage.getItem('routines') || '{}');
         if (!routines[dateKey()]) {
             routines[dateKey()] = [
@@ -1409,7 +1394,6 @@
             loadRoutines();
         }
 
-        // Initial bucket list if empty
         const bucketlist = JSON.parse(localStorage.getItem('bucketlist') || '{}');
         if (!bucketlist[dateKey()]) {
             bucketlist[dateKey()] = {
