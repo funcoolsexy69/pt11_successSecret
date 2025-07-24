@@ -121,12 +121,21 @@
                     cell.dataset.hour = hour;
                     cell.dataset.day = day;
 
-                    // Load saved data into cell
                     const key = `${hour}-${day}`;
-                    if (savedData[key]) {
-                        cell.textContent = savedData[key].text || "";
-                        if (savedData[key].color) {
-                            cell.style.backgroundColor = savedData[key].color;
+                    let cellData = savedData[key];
+
+                    // Backward compatibility: if old data is string, convert to object
+                    if (typeof cellData === 'string') {
+                        cellData = { text: cellData };
+                        savedData[key] = cellData;
+                        saveTableData(savedData);
+                    }
+
+                    // Load saved data into cell
+                    if (cellData) {
+                        cell.textContent = cellData.text || "";
+                        if (cellData.color) {
+                            cell.style.backgroundColor = cellData.color;
                         }
                     }
 
