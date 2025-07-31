@@ -449,7 +449,7 @@
     <div class="pinned">
         <div id="pinnedList"></div>
         <div class="add-form">
-            <input id="newPinnedEmoji" placeholder="Emoji (e.g., 📍)">
+            <input id="newPinnedEmoji" placeholder="Emoji (e.g., 💕)">
             <input id="newPinnedText" placeholder="Text">
             <button onclick="addPinned()">Add Pinned</button>
         </div>
@@ -498,8 +498,8 @@
     <div id="routinesSection">
         <div class="routines" id="routinesList"></div>
         <div class="add-form">
-            <input id="newTime" placeholder="Time (e.g., 7 PM)">
-            <input id="newEmoji" placeholder="Emoji (e.g., ❤️)">
+            <input id="newTime" placeholder="Time (e.g., 4 PM)">
+            <input id="newEmoji" placeholder="Emoji (e.g., 💕)">
             <input id="newText" placeholder="Text">
             <button onclick="addRoutine()">Add Routine</button>
             <button class="next-button" onclick="copyAllRoutinesToNextDay()">Copy All to Next Day</button>
@@ -1356,7 +1356,7 @@
         const pinned = JSON.parse(localStorage.getItem('pinned') || '{}');
         if (!pinned[dateKey()]) {
             pinned[dateKey()] = [
-                { emoji: '📍', text: 'Xtal Founder/CEO/CTO' }
+                { emoji: '💕', text: 'Xtal Founder/CEO/CTO' }
             ];
             localStorage.setItem('pinned', JSON.stringify(pinned));
             loadPinned();
@@ -1397,15 +1397,15 @@
         const bucketlist = JSON.parse(localStorage.getItem('bucketlist') || '{}');
         if (!bucketlist[dateKey()]) {
             bucketlist[dateKey()] = {
-                title_bucket1: 'Run a Tech Company',
-                deadline_bucket1: 'January 2025',
-                description_bucket1: 'Plan, hire talent, delegate',
-                title_bucket2: 'Become CTO',
+                title_bucket1: 'Launch an iOS app',
+                deadline_bucket1: 'December 2025',
+                description_bucket1: 'Launch an iOS app on the App Store for free',
+                title_bucket2: 'Fluent English',
                 deadline_bucket2: 'December 2025',
-                description_bucket2: 'Iterate development projects quickly',
-                title_bucket3: 'Fluent English',
+                description_bucket2: 'Speaking, Listening, Writing, Reading',
+                title_bucket3: 'Run a Tech Corporation',
                 deadline_bucket3: 'December 2025',
-                description_bucket3: 'Maintain proficiency'
+                description_bucket3: 'Plan, hire talent, delegate, iterate development projects quickly'
             };
             localStorage.setItem('bucketlist', JSON.stringify(bucketlist));
             loadBucketList();
