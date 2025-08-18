@@ -600,23 +600,19 @@
         <button>Social</button>
         <button>MY</button>
     </div>
-
     <script>
         let currentDate = new Date();
         let pickerDate;
         const dateKey = () => currentDate.toISOString().split('T')[0];
-
         function getNextDateKey() {
             const nextDate = new Date(currentDate);
             nextDate.setDate(currentDate.getDate() + 1);
             return nextDate.toISOString().split('T')[0];
         }
-
         function updateDateDisplay() {
             const month = currentDate.toLocaleString('default', { month: 'short' });
             document.getElementById('currentDate').textContent = `${month} ${currentDate.getFullYear()} ▼`;
         }
-
         function renderCalendar() {
             const calendar = document.getElementById('calendar');
             calendar.innerHTML = '';
@@ -642,7 +638,6 @@
                 calendar.appendChild(div);
             }
         }
-
         function toggleCalendarPicker() {
             const picker = document.getElementById('calendarPicker');
             if (picker.classList.contains('hidden')) {
@@ -653,7 +648,6 @@
                 picker.classList.add('hidden');
             }
         }
-
         function renderMonthCalendar() {
             const picker = document.getElementById('calendarPicker');
             picker.innerHTML = '';
@@ -715,17 +709,14 @@
             }
             picker.appendChild(daysGrid);
         }
-
         function changeMonth(delta) {
             pickerDate.setMonth(pickerDate.getMonth() + delta);
             renderMonthCalendar();
         }
-
         function changeYear(delta) {
             pickerDate.setFullYear(pickerDate.getFullYear() + delta);
             renderMonthCalendar();
         }
-
         function switchTab(tab) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.querySelector(`.tab[onclick="switchTab('${tab}')"]`).classList.add('active');
@@ -735,7 +726,6 @@
             document.getElementById('reflectionsSection').classList.toggle('hidden', tab !== 'reflections');
             document.getElementById('bucketlistSection').classList.toggle('hidden', tab !== 'bucketlist');
         }
-
         function loadItems() {
             loadPinned();
             loadRoutines();
@@ -744,7 +734,6 @@
             loadPriority();
             loadBucketList();
         }
-
         function loadPinned() {
             const pinned = JSON.parse(localStorage.getItem('pinned') || '{}');
             const currentPinned = pinned[dateKey()] || [];
@@ -764,7 +753,6 @@
                 list.appendChild(div);
             });
         }
-
         function addPinned() {
             const emoji = document.getElementById('newPinnedEmoji').value;
             const text = document.getElementById('newPinnedText').value;
@@ -778,7 +766,6 @@
             document.getElementById('newPinnedText').value = '';
             loadPinned();
         }
-
         function editPinned(index) {
             const pinned = JSON.parse(localStorage.getItem('pinned') || '{}');
             const currentPinned = pinned[dateKey()] || [];
@@ -791,7 +778,6 @@
             localStorage.setItem('pinned', JSON.stringify(pinned));
             loadPinned();
         }
-
         function deletePinned(index) {
             const pinned = JSON.parse(localStorage.getItem('pinned') || '{}');
             const currentPinned = pinned[dateKey()] || [];
@@ -800,7 +786,6 @@
             localStorage.setItem('pinned', JSON.stringify(pinned));
             loadPinned();
         }
-
         function movePinned(index, direction) {
             const pinned = JSON.parse(localStorage.getItem('pinned') || '{}');
             const currentPinned = pinned[dateKey()] || [];
@@ -813,7 +798,6 @@
             localStorage.setItem('pinned', JSON.stringify(pinned));
             loadPinned();
         }
-
         function copyPinnedToNextDay(index) {
             const pinned = JSON.parse(localStorage.getItem('pinned') || '{}');
             const currentPinned = pinned[dateKey()] || [];
@@ -825,7 +809,6 @@
             localStorage.setItem('pinned', JSON.stringify(pinned));
             alert(`Pinned item "${pin.text}" copied to ${nextDateKey}`);
         }
-
         function loadRoutines() {
             const routines = JSON.parse(localStorage.getItem('routines') || '{}');
             const currentRoutines = routines[dateKey()] || [];
@@ -848,7 +831,6 @@
                 list.appendChild(div);
             });
         }
-
         function addRoutine() {
             const time = document.getElementById('newTime').value;
             const emoji = document.getElementById('newEmoji').value;
@@ -867,7 +849,6 @@
             loadRoutines();
             routinesList.scrollTop = scrollPosition;
         }
-
         function toggleRoutineCheck(index) {
             const routines = JSON.parse(localStorage.getItem('routines') || '{}');
             const currentRoutines = routines[dateKey()] || [];
@@ -879,7 +860,6 @@
             loadRoutines();
             routinesList.scrollTop = scrollPosition;
         }
-
         function editRoutine(index) {
             const routines = JSON.parse(localStorage.getItem('routines') || '{}');
             const currentRoutines = routines[dateKey()] || [];
@@ -897,7 +877,6 @@
             loadRoutines();
             routinesList.scrollTop = scrollPosition;
         }
-
         function deleteRoutine(index) {
             const routines = JSON.parse(localStorage.getItem('routines') || '{}');
             const currentRoutines = routines[dateKey()] || [];
@@ -909,7 +888,6 @@
             loadRoutines();
             routinesList.scrollTop = scrollPosition;
         }
-
         function moveRoutine(index, direction) {
             const routines = JSON.parse(localStorage.getItem('routines') || '{}');
             const currentRoutines = routines[dateKey()] || [];
@@ -925,7 +903,6 @@
             loadRoutines();
             routinesList.scrollTop = scrollPosition;
         }
-
         function copyRoutineToNextDay(index) {
             const routines = JSON.parse(localStorage.getItem('routines') || '{}');
             const currentRoutines = routines[dateKey()] || [];
@@ -937,7 +914,6 @@
             localStorage.setItem('routines', JSON.stringify(routines));
             alert(`Routine "${routine.text}" copied to ${nextDateKey}`);
         }
-
         function copyAllRoutinesToNextDay() {
             const routines = JSON.parse(localStorage.getItem('routines') || '{}');
             const currentRoutines = routines[dateKey()] || [];
@@ -950,7 +926,6 @@
             localStorage.setItem('routines', JSON.stringify(routines));
             alert(`All routines copied to ${nextDateKey}`);
         }
-
         function loadTodos() {
             const todos = JSON.parse(localStorage.getItem('todos') || '{}');
             const currentTodos = todos[dateKey()] || [];
@@ -961,11 +936,11 @@
                 div.className = `todo-item ${todo.isNew ? 'new' : ''} ${todo.checked ? 'completed' : ''}`;
                 div.innerHTML = `
                     <input type="checkbox" ${todo.checked ? 'checked' : ''} onchange="toggleTodoCheck(${index})">
-                    <span class="todo-importance">${todo.importance || ''}</span> - 
-                    <span class="todo-priority">${todo.priority || ''}</span> - 
-                    <span class="todo-task">${todo.task || ''}</span> - 
-                    <span class="todo-estimatedTime">${todo.estimatedTime || ''}</span> - 
-                    <span class="todo-startTime">${todo.startTime || ''}</span> - 
+                    <span class="todo-importance">${todo.importance || ''}</span> -
+                    <span class="todo-priority">${todo.priority || ''}</span> -
+                    <span class="todo-task">${todo.task || ''}</span> -
+                    <span class="todo-estimatedTime">${todo.estimatedTime || ''}</span> -
+                    <span class="todo-startTime">${todo.startTime || ''}</span> -
                     <span class="todo-deadline">${todo.deadline || ''}</span>
                     <button class="edit-button" onclick="editTodo(${index})">Edit</button>
                     <button class="delete-button" onclick="deleteTodo(${index})">Delete</button>
@@ -976,7 +951,6 @@
                 todosBody.appendChild(div);
             });
         }
-
         function addTodo() {
             const importance = document.getElementById('newImportance').value;
             const priority = document.getElementById('newPriority').value;
@@ -1001,7 +975,6 @@
             document.getElementById('newDeadline').value = '';
             loadTodos();
         }
-
         function toggleTodoCheck(index) {
             const todos = JSON.parse(localStorage.getItem('todos') || '{}');
             const currentTodos = todos[dateKey()] || [];
@@ -1010,7 +983,6 @@
             localStorage.setItem('todos', JSON.stringify(todos));
             loadTodos();
         }
-
         function deleteTodo(index) {
             const todos = JSON.parse(localStorage.getItem('todos') || '{}');
             const currentTodos = todos[dateKey()] || [];
@@ -1019,7 +991,6 @@
             localStorage.setItem('todos', JSON.stringify(todos));
             loadTodos();
         }
-
         function editTodo(index) {
             const todos = JSON.parse(localStorage.getItem('todos') || '{}');
             const currentTodos = todos[dateKey()] || [];
@@ -1040,7 +1011,6 @@
             localStorage.setItem('todos', JSON.stringify(todos));
             loadTodos();
         }
-
         function moveTodo(index, direction) {
             const todos = JSON.parse(localStorage.getItem('todos') || '{}');
             const currentTodos = todos[dateKey()] || [];
@@ -1053,7 +1023,6 @@
             localStorage.setItem('todos', JSON.stringify(todos));
             loadTodos();
         }
-
         function copyTodoToNextDay(index) {
             const todos = JSON.parse(localStorage.getItem('todos') || '{}');
             const currentTodos = todos[dateKey()] || [];
@@ -1074,7 +1043,6 @@
             localStorage.setItem('todos', JSON.stringify(todos));
             alert(`Todo "${todo.task}" copied to ${nextDateKey}`);
         }
-
         function saveReflections() {
             const data = {
                 wordsToSelf: document.getElementById('wordsToSelf').value,
@@ -1091,7 +1059,6 @@
             reflections[dateKey()] = data;
             localStorage.setItem('reflections', JSON.stringify(reflections));
         }
-
         function loadReflections() {
             const reflections = JSON.parse(localStorage.getItem('reflections') || '{}');
             const data = reflections[dateKey()] || {};
@@ -1105,7 +1072,6 @@
             document.getElementById('reflection3').value = data.reflection3 || '';
             document.getElementById('reflection4').value = data.reflection4 || '';
         }
-
         function copyWordsToSelfToNextDay() {
             const reflections = JSON.parse(localStorage.getItem('reflections') || '{}');
             const currentData = reflections[dateKey()] || {};
@@ -1116,7 +1082,6 @@
             localStorage.setItem('reflections', JSON.stringify(reflections));
             alert(`Words to Self copied to ${nextDateKey}`);
         }
-
         function copyReflectionToNextDay() {
             const reflections = JSON.parse(localStorage.getItem('reflections') || '{}');
             const currentData = reflections[dateKey()] || {};
@@ -1127,7 +1092,6 @@
             localStorage.setItem('reflections', JSON.stringify(reflections));
             alert(`Best Possible Scenario copied to ${nextDateKey}`);
         }
-
         function copyGratitudeToNextDay() {
             const reflections = JSON.parse(localStorage.getItem('reflections') || '{}');
             const currentData = reflections[dateKey()] || {};
@@ -1138,7 +1102,6 @@
             localStorage.setItem('reflections', JSON.stringify(reflections));
             alert(`Today's Goals copied to ${nextDateKey}`);
         }
-
         function copyChallengesToNextDay() {
             const reflections = JSON.parse(localStorage.getItem('reflections') || '{}');
             const currentData = reflections[dateKey()] || {};
@@ -1149,7 +1112,6 @@
             localStorage.setItem('reflections', JSON.stringify(reflections));
             alert(`Things to Improve copied to ${nextDateKey}`);
         }
-
         function copyPlansToNextDay() {
             const reflections = JSON.parse(localStorage.getItem('reflections') || '{}');
             const currentData = reflections[dateKey()] || {};
@@ -1160,7 +1122,6 @@
             localStorage.setItem('reflections', JSON.stringify(reflections));
             alert(`Today's Achieved Goals copied to ${nextDateKey}`);
         }
-
         function copyMotivationToNextDay() {
             const reflections = JSON.parse(localStorage.getItem('reflections') || '{}');
             const currentData = reflections[dateKey()] || {};
@@ -1171,7 +1132,6 @@
             localStorage.setItem('reflections', JSON.stringify(reflections));
             alert(`Praise and Gratitude to Myself copied to ${nextDateKey}`);
         }
-
         function copyReflection2ToNextDay() {
             const reflections = JSON.parse(localStorage.getItem('reflections') || '{}');
             const currentData = reflections[dateKey()] || {};
@@ -1182,7 +1142,6 @@
             localStorage.setItem('reflections', JSON.stringify(reflections));
             alert(`Problems, Obstacles, Reasons for Failure copied to ${nextDateKey}`);
         }
-
         function copyReflection3ToNextDay() {
             const reflections = JSON.parse(localStorage.getItem('reflections') || '{}');
             const currentData = reflections[dateKey()] || {};
@@ -1193,7 +1152,6 @@
             localStorage.setItem('reflections', JSON.stringify(reflections));
             alert(`By When, How, Solutions, Lessons Learned copied to ${nextDateKey}`);
         }
-
         function copyReflection4ToNextDay() {
             const reflections = JSON.parse(localStorage.getItem('reflections') || '{}');
             const currentData = reflections[dateKey()] || {};
@@ -1204,7 +1162,6 @@
             localStorage.setItem('reflections', JSON.stringify(reflections));
             alert(`Tomorrow's Goals copied to ${nextDateKey}`);
         }
-
         function savePriority(taskId) {
             const taskText = document.getElementById(taskId).value;
             const priorityTasks = JSON.parse(localStorage.getItem('priorityTasks') || '{}');
@@ -1213,7 +1170,6 @@
             priorityTasks[dateKey()] = currentTasks;
             localStorage.setItem('priorityTasks', JSON.stringify(priorityTasks));
         }
-
         function loadPriority() {
             const priorityTasks = JSON.parse(localStorage.getItem('priorityTasks') || '{}');
             const currentTasks = priorityTasks[dateKey()] || {};
@@ -1222,7 +1178,6 @@
             document.getElementById('task3').value = currentTasks.task3 || '';
             document.getElementById('task4').value = currentTasks.task4 || '';
         }
-
         function copyTask1ToNextDay() {
             const priorityTasks = JSON.parse(localStorage.getItem('priorityTasks') || '{}');
             const currentTasks = priorityTasks[dateKey()] || {};
@@ -1233,7 +1188,6 @@
             localStorage.setItem('priorityTasks', JSON.stringify(priorityTasks));
             alert(`Priority 1 copied to ${nextDateKey}`);
         }
-
         function copyTask2ToNextDay() {
             const priorityTasks = JSON.parse(localStorage.getItem('priorityTasks') || '{}');
             const currentTasks = priorityTasks[dateKey()] || {};
@@ -1244,7 +1198,6 @@
             localStorage.setItem('priorityTasks', JSON.stringify(priorityTasks));
             alert(`Priority 2 copied to ${nextDateKey}`);
         }
-
         function copyTask3ToNextDay() {
             const priorityTasks = JSON.parse(localStorage.getItem('priorityTasks') || '{}');
             const currentTasks = priorityTasks[dateKey()] || {};
@@ -1255,7 +1208,6 @@
             localStorage.setItem('priorityTasks', JSON.stringify(priorityTasks));
             alert(`Priority 3 copied to ${nextDateKey}`);
         }
-
         function copyTask4ToNextDay() {
             const priorityTasks = JSON.parse(localStorage.getItem('priorityTasks') || '{}');
             const currentTasks = priorityTasks[dateKey()] || {};
@@ -1266,7 +1218,6 @@
             localStorage.setItem('priorityTasks', JSON.stringify(priorityTasks));
             alert(`Priority 4 copied to ${nextDateKey}`);
         }
-
         function saveBucketList() {
             const data = {
                 title_bucket1: document.getElementById('title_bucket1').value,
@@ -1283,7 +1234,6 @@
             bucketlist[dateKey()] = data;
             localStorage.setItem('bucketlist', JSON.stringify(bucketlist));
         }
-
         function loadBucketList() {
             const bucketlist = JSON.parse(localStorage.getItem('bucketlist') || '{}');
             const data = bucketlist[dateKey()] || {};
@@ -1297,7 +1247,6 @@
             document.getElementById('deadline_bucket3').value = data.deadline_bucket3 || '';
             document.getElementById('description_bucket3').value = data.description_bucket3 || '';
         }
-
         function copyBucket1ToNextDay() {
             const bucketlist = JSON.parse(localStorage.getItem('bucketlist') || '{}');
             const currentData = bucketlist[dateKey()] || {};
@@ -1310,7 +1259,6 @@
             localStorage.setItem('bucketlist', JSON.stringify(bucketlist));
             alert(`Bucket List Item 1 copied to ${nextDateKey}`);
         }
-
         function copyBucket2ToNextDay() {
             const bucketlist = JSON.parse(localStorage.getItem('bucketlist') || '{}');
             const currentData = bucketlist[dateKey()] || {};
@@ -1323,7 +1271,6 @@
             localStorage.setItem('bucketlist', JSON.stringify(bucketlist));
             alert(`Bucket List Item 2 copied to ${nextDateKey}`);
         }
-
         function copyBucket3ToNextDay() {
             const bucketlist = JSON.parse(localStorage.getItem('bucketlist') || '{}');
             const currentData = bucketlist[dateKey()] || {};
@@ -1336,11 +1283,9 @@
             localStorage.setItem('bucketlist', JSON.stringify(bucketlist));
             alert(`Bucket List Item 3 copied to ${nextDateKey}`);
         }
-
         updateDateDisplay();
         renderCalendar();
         loadItems();
-
         document.querySelectorAll('#reflectionsSection textarea, #prioritySection textarea, #bucketlistSection input, #bucketlistSection textarea').forEach(input => {
             input.addEventListener('input', () => {
                 if (input.closest('#reflectionsSection')) {
@@ -1352,21 +1297,19 @@
                 }
             });
         });
-
         const pinned = JSON.parse(localStorage.getItem('pinned') || '{}');
         if (!pinned[dateKey()]) {
             pinned[dateKey()] = [
-                { emoji: '💕', text: 'Xtal Founder/CEO/CTO/Inventor' }
-                { emoji: '💕', text: '전세계 해외여행 다니는 기업가, Xtal, Problem-solver, Builder, Maker, Producer, Risk-taker. 세상을 바꾸는 사람들이 좋아하는 놀랍고 유용한 제품을 만드는 사람. 모두를 위한 지속 가능한 풍요.' }
-                { emoji: '💕', text: '2026년 실리콘밸리 팔로알토,글로벌인재유치,해외vc투자받기,뉴욕증시상장,NYSE오프닝벨울리기,NYSE IPO,연쇄창업,포브스기업인,사회환원' }
-                { emoji: '💕', text: 'Positive impact on humanity and the world through technology 소비자만족 신뢰, 인공지능테크제조주식회사(소프트웨어&하드웨어)' }
-                { emoji: '💕', text: '개발자,연구원,엔지니어,과학자,영재들을 위한 발명천국 만들기,누구나세일즈가될수있는우리회사,성과급높은회사' }
+                { emoji: '💕', text: 'Xtal Founder/CEO/CTO/Inventor' },
+                { emoji: '💕', text: '전세계 해외여행 다니는 기업가, Xtal, Problem-solver, Builder, Maker, Producer, Risk-taker. 세상을 바꾸는 사람들이 좋아하는 놀랍고 유용한 제품을 만드는 사람. 모두를 위한 지속 가능한 풍요.' },
+                { emoji: '💕', text: '2026년 실리콘밸리 팔로알토,글로벌인재유치,해외vc투자받기,뉴욕증시상장,NYSE오프닝벨울리기,NYSE IPO,연쇄창업,포브스기업인,사회환원' },
+                { emoji: '💕', text: 'Positive impact on humanity and the world through technology 소비자만족 신뢰, 인공지능테크제조주식회사(소프트웨어&하드웨어)' },
+                { emoji: '💕', text: '개발자,연구원,엔지니어,과학자,영재들을 위한 발명천국 만들기,누구나세일즈가될수있는우리회사,성과급높은회사' },
                 { emoji: '💕', text: '과학신기술 CTO 디자인헤드 글로벌마켓 테크 스타트업 테크노퀸 최고의기업가 문제해결사 혁신가 실행가 설계자 발명가 도전가 모험가 탐험가 크리스탈머스크' }
             ];
             localStorage.setItem('pinned', JSON.stringify(pinned));
             loadPinned();
         }
-
         const routines = JSON.parse(localStorage.getItem('routines') || '{}');
         if (!routines[dateKey()]) {
             routines[dateKey()] = [
@@ -1398,7 +1341,6 @@
             localStorage.setItem('routines', JSON.stringify(routines));
             loadRoutines();
         }
-
         const bucketlist = JSON.parse(localStorage.getItem('bucketlist') || '{}');
         if (!bucketlist[dateKey()]) {
             bucketlist[dateKey()] = {
@@ -1418,5 +1360,3 @@
     </script>
 </body>
 </html>
-
-
