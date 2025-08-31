@@ -513,8 +513,8 @@
             <div id="todosBody"></div>
         </div>
         <div class="todos-add-form">
-            <input id="newImportance" placeholder="Importance">
             <input id="newPriority" placeholder="Priority">
+            <input id="newImportance" placeholder="Importance">
             <input id="newTask" placeholder="Task">
             <input id="newEstimatedTime" placeholder="Estimated Time">
             <input id="newStartTime" placeholder="Start Time">
@@ -939,8 +939,8 @@
                 div.className = `todo-item ${todo.isNew ? 'new' : ''} ${todo.checked ? 'completed' : ''}`;
                 div.innerHTML = `
                     <input type="checkbox" ${todo.checked ? 'checked' : ''} onchange="toggleTodoCheck(${index})">
-                    <span class="todo-importance">${todo.importance || ''}</span> -
                     <span class="todo-priority">${todo.priority || ''}</span> -
+                    <span class="todo-importance">${todo.importance || ''}</span> -
                     <span class="todo-task">${todo.task || ''}</span> -
                     <span class="todo-estimatedTime">${todo.estimatedTime || ''}</span> -
                     <span class="todo-startTime">${todo.startTime || ''}</span> -
@@ -955,8 +955,8 @@
             });
         }
         function addTodo() {
-            const importance = document.getElementById('newImportance').value;
             const priority = document.getElementById('newPriority').value;
+            const importance = document.getElementById('newImportance').value;
             const task = document.getElementById('newTask').value;
             const estimatedTime = document.getElementById('newEstimatedTime').value;
             const startTime = document.getElementById('newStartTime').value;
@@ -967,11 +967,11 @@
             }
             const todos = JSON.parse(localStorage.getItem('todos') || '{}');
             const currentTodos = todos[dateKey()] || [];
-            currentTodos.push({ importance, priority, task, estimatedTime, startTime, deadline, checked: false, isNew: true });
+            currentTodos.push({ priority, importance, task, estimatedTime, startTime, deadline, checked: false, isNew: true });
             todos[dateKey()] = currentTodos;
             localStorage.setItem('todos', JSON.stringify(todos));
-            document.getElementById('newImportance').value = '';
             document.getElementById('newPriority').value = '';
+            document.getElementById('newImportance').value = '';
             document.getElementById('newTask').value = '';
             document.getElementById('newEstimatedTime').value = '';
             document.getElementById('newStartTime').value = '';
@@ -998,10 +998,10 @@
             const todos = JSON.parse(localStorage.getItem('todos') || '{}');
             const currentTodos = todos[dateKey()] || [];
             const todo = currentTodos[index];
-            const newImportance = prompt("Edit Importance:", todo.importance || '');
-            if (newImportance !== null) todo.importance = newImportance;
             const newPriority = prompt("Edit Priority:", todo.priority || '');
             if (newPriority !== null) todo.priority = newPriority;
+            const newImportance = prompt("Edit Importance:", todo.importance || '');
+            if (newImportance !== null) todo.importance = newImportance;
             const newTask = prompt("Edit Task:", todo.task || '');
             if (newTask !== null) todo.task = newTask;
             const newEstimatedTime = prompt("Edit Estimated Time:", todo.estimatedTime || '');
@@ -1363,6 +1363,7 @@
     </script>
 </body>
 </html>
+
 
 
 
