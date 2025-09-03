@@ -189,6 +189,13 @@
         .next-button:hover {
             background-color: #218838;
         }
+        .prev-button {
+            margin-right: 5px;
+            background-color: #007bff;
+        }
+        .prev-button:hover {
+            background-color: #0069d9;
+        }
         .todos-add-form {
             display: flex;
             flex-wrap: wrap;
@@ -506,6 +513,7 @@
             <input id="newText" placeholder="Text">
             <button onclick="addRoutine()">Add Routine</button>
             <button class="next-button" onclick="copyAllRoutinesToNextDay()">Copy All to Next Day</button>
+            <button class="prev-button" onclick="copyAllRoutinesFromNextDay()">Copy All from Next Day</button>
         </div>
     </div>
     <div id="todosSection" class="hidden">
@@ -928,6 +936,22 @@
             routines[nextDateKey] = nextRoutines;
             localStorage.setItem('routines', JSON.stringify(routines));
             alert(`All routines copied to ${nextDateKey}`);
+        }
+        function copyAllRoutinesFromNextDay() {
+            const routines = JSON.parse(localStorage.getItem('routines') || '{}');
+            const nextDateKey = getNextDateKey();
+            const nextRoutines = routines[nextDateKey] || [];
+            const currentRoutines = routines[dateKey()] || [];
+            nextRoutines.forEach(routine => {
+                currentRoutines.push({ time: routine.time, emoji: routine.emoji, text: routine.text, checked: false });
+            });
+            routines[dateKey()] = currentRoutines;
+            localStorage.setItem('routines', JSON.stringify(routines));
+            alert(`All routines copied from ${nextDateKey} to current day`);
+            const routinesList = document.getElementById('routinesList');
+            const scrollPosition = routinesList.scrollTop;
+            loadRoutines();
+            routinesList.scrollTop = scrollPosition;
         }
         function loadTodos() {
             const todos = JSON.parse(localStorage.getItem('todos') || '{}');
