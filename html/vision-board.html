@@ -21,7 +21,7 @@
             margin: 0;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
+            justify-content: center; /* Changed to center for vertical alignment */
             align-items: center;
             background-color: pink;
             min-height: 100vh;
@@ -42,7 +42,7 @@
             display: grid; /* 변경된 부분 */
             grid-template-columns: repeat(2, 1fr); /* 변경된 부분 */
             grid-gap: 20px; /* 변경된 부분 */
-            margin-top: 150px; /* Adjust for top footer */
+            margin-top: 20px; /* Reduced margin since header is now static */
             width: 80%;
             max-width: 1200px;
         }
@@ -51,23 +51,19 @@
         }
         .photo-frame {
             border: 2px solid white; /* 흰색 테두리 추가 */
-            width: calc(500px * 1.618); /* 가로를 먼저 정의 */
-            height: 500px; /* 변경된 부분 */
+            width: calc(300px * 1.618); /* Scaled down golden ratio width */
+            height: 300px; /* Scaled down height for harmony with plan */
             background-size: cover;
             position: relative;
             cursor: pointer;
         }
         .footer {
-            position: fixed;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
             display: flex;
             flex-direction: column;
             align-items: center; /* 수직 정렬을 가운데로 이동 */
             justify-content: center; /* 가로 정렬을 중앙으로 유지 */
             width: 100%;
-            z-index: 10;
+            /* Removed fixed positioning; now static at top */
         }
         .f-title {
             color: white;
