@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="mul">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>비전보드</title>
+    <title>Elon's Vision Board & 1-Year Plan</title>
     <style>
         /* 이서윤체 폰트 적용을 위한 코드 */
         @font-face {
@@ -14,43 +13,42 @@
             font-weight: normal;
             font-style: normal;
         }
-
         /* body태그 자체에 css 요소 부여 */
         body {
-                background: url(../img/star.jpg) no-repeat fixed;
-    			background-size: cover;
+            background: url(../img/star.jpg) no-repeat fixed;
+            background-size: cover;
             font-family: "LeeSeoyun";
             margin: 0;
             display: flex;
-            justify-content: center;
-            align-items: center; /* 추가된 부분 */
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
             background-color: pink;
-            height: 100vh; /* 추가된 부분 */
-        animation: star-blink 2s linear infinite alternate; /* star blink 애니메이션 적용 */
-    }
-    
-    @keyframes star-blink {
-    0% {
-        background-color: pink; /* 시작 색상 */
-    }
-    50% {
-        background-color: #ff69b4; /* 교차되는 색상 */
-    }
-    100% {
-        background-color: pink; /* 시작 색상 */
-    }
-}
-
+            min-height: 100vh;
+            animation: star-blink 2s linear infinite alternate; /* star blink 애니메이션 적용 */
+        }
+        @keyframes star-blink {
+            0% {
+                background-color: pink; /* 시작 색상 */
+            }
+            50% {
+                background-color: #ff69b4; /* 교차되는 색상 */
+            }
+            100% {
+                background-color: pink; /* 시작 색상 */
+            }
+        }
         .container {
             display: grid; /* 변경된 부분 */
             grid-template-columns: repeat(2, 1fr); /* 변경된 부분 */
             grid-gap: 20px; /* 변경된 부분 */
+            margin-top: 150px; /* Adjust for top footer */
+            width: 80%;
+            max-width: 1200px;
         }
-
         .photos {
             margin-top: 30px;
         }
-
         .photo-frame {
             border: 2px solid white; /* 흰색 테두리 추가 */
             width: calc(500px * 1.618); /* 가로를 먼저 정의 */
@@ -59,40 +57,33 @@
             position: relative;
             cursor: pointer;
         }
-
-.footer {
-    position: fixed;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* 수직 정렬을 가운데로 이동 */
-    justify-content: center; /* 가로 정렬을 중앙으로 유지 */
-    width: 100%;
-}
-
-
-.f-title {
-    color: white;
-    font-size: 60px;
-    font-weight: 900;
-    margin-bottom: 5px; /* 수정된 값 */
-}
-
-        
-      	#image1 {
+        .footer {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* 수직 정렬을 가운데로 이동 */
+            justify-content: center; /* 가로 정렬을 중앙으로 유지 */
+            width: 100%;
+            z-index: 10;
+        }
+        .f-title {
+            color: white;
+            font-size: 60px;
+            font-weight: 900;
+            margin-bottom: 5px; /* 수정된 값 */
+        }
+        #image1 {
             background-image: url(../img/elonmusk.png);
         }
-
         #image2 {
             background-image: url(../img/decacorn.png);
         }
-
         #image3 {
             background-image: url(../img/nyse.png);
         }
-
         .photo-description {
             color: white;
             background-color: black;
@@ -106,25 +97,110 @@
             left: 50%;
             opacity: 0;
         }
-
         .video {
             width: 100%;
             height: 100%;
         }
-
         .showText {
             opacity: 0;
         }
-
         .hideText {
             opacity: 1;
             transition: opacity 0.5s linear;
         }
+        /* Plan styles integrated with harmonized colors */
+        .plan-section {
+            width: 80%;
+            max-width: 1200px;
+            margin: 40px auto;
+            color: #fff;
+            text-align: center;
+        }
+        .plan-section h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #ff1493; /* Deep pink */
+        }
+        .month {
+            background-color: #da70d6; /* Orchid purple-pink */
+            border: 1px solid #c71585; /* Medium violet red */
+            margin: 10px auto;
+            padding: 15px;
+            width: 80%;
+            max-width: 600px;
+            cursor: pointer;
+            transition: background 0.3s, box-shadow 0.3s;
+        }
+        .month:hover {
+            background-color: #ee82ee; /* Violet pink glow */
+            box-shadow: 0 0 15px #ff00ff; /* Magenta shine */
+        }
+        .month h2 {
+            margin: 0;
+            font-size: 1.5em;
+            color: #fff;
+        }
+        .details {
+            display: none;
+            text-align: left;
+            margin-top: 10px;
+        }
+        .details ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .details li {
+            margin: 5px 0;
+            font-size: 1.1em;
+            position: relative;
+            padding-left: 25px;
+        }
+        .details li:before {
+            content: "🚀 ";
+            position: absolute;
+            left: 0;
+        }
+        .editable {
+            outline: none;
+        }
+        .editable:focus {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .action-btn {
+            margin: 5px;
+            padding: 5px 10px;
+            background-color: #ff00ff;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background 0.3s;
+        }
+        .action-btn:hover {
+            background-color: #c71585;
+        }
+        .save-btn {
+            display: block;
+            margin: 10px auto;
+            padding: 10px 20px;
+            background-color: #ff00ff;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s;
+        }
+        .save-btn:hover {
+            background-color: #c71585;
+        }
+        .plan-footer {
+            margin-top: 30px;
+            font-size: 0.8em;
+            color: #ffd1dc; /* Light pinkish */
+        }
     </style>
     <script>
-        // 텍스트가 보여지는 기능
-        // 1. 몇 번째 사진에 마우스가 올라갔는지 확인(if문)
-        // 2. 해당 사진을 찾아 hideText class를 지워주고, showText는 삽입해줌
+        // Vision board scripts
         function showText(number) {
             if (number === 1) {
                 document.querySelector("#desc1").classList.remove("hideText");
@@ -137,10 +213,6 @@
                 document.querySelector("#desc3").classList.add("showText");
             }
         }
-
-        // 텍스트가 감춰지는 기능
-        // 1. 몇 번째 사진에서 마우스가 벗어났는지 확인(if문)
-        // 2. 해당 사진을 찾아 shotText class를 지워주고, hideText는 삽입해줌
         function hideText(number) {
             if (number === 1) {
                 document.querySelector("#desc1").classList.remove("showText");
@@ -153,16 +225,59 @@
                 document.querySelector("#desc3").classList.add("hideText");
             }
         }
-
-        // 클릭 기능
-        // 1. 선택된 사진의 숫자를 가진 텍스트를 alert 형태로 출력해줌
         function alertText(number) {
             alert(`${number}번째 이미지에요! 이루어졌다고 상상해보세요!`);
         }
+        // Plan scripts
+        function toggleDetails(element) {
+            if (event.target.tagName !== 'BUTTON' && event.target.tagName !== 'LI') {
+                const details = element.querySelector('.details');
+                details.style.display = details.style.display === 'block' ? 'none' : 'block';
+            }
+        }
+        function addItem(ul) {
+            const newLi = document.createElement('li');
+            newLi.contentEditable = true;
+            newLi.classList.add('editable');
+            newLi.textContent = 'New milestone—edit me.';
+            ul.appendChild(newLi);
+        }
+        function deleteItem(ul) {
+            const selected = Array.from(ul.querySelectorAll('li')).find(li => getSelection().containsNode(li, true));
+            if (selected) {
+                selected.remove();
+            } else {
+                alert('Select text in an item to delete it.');
+            }
+        }
+        window.onload = function() {
+            const months = document.querySelectorAll('.month');
+            months.forEach((month, index) => {
+                const savedItems = localStorage.getItem(`month_${index}`);
+                if (savedItems) {
+                    const ul = month.querySelector('ul');
+                    ul.innerHTML = savedItems;
+                    ul.querySelectorAll('li').forEach(li => {
+                        li.contentEditable = true;
+                        li.classList.add('editable');
+                    });
+                }
+            });
+        };
+        function savePlan() {
+            const months = document.querySelectorAll('.month');
+            months.forEach((month, index) => {
+                const ul = month.querySelector('ul');
+                localStorage.setItem(`month_${index}`, ul.innerHTML);
+            });
+            alert('Plan saved to localStorage. Refresh to see it stick.');
+        }
     </script>
 </head>
-
 <body>
+    <div class="footer">
+        <p class="f-title">Vision of 성공비밀</p>
+    </div>
     <div class="container">
         <div class="photos">
             <div id="image1" class="photo-frame" onmouseover="showText(1)" onmouseout="hideText(1)"
@@ -190,9 +305,181 @@
             </div>
         </div>
     </div>
-    <div class="footer">
-        <p class="f-title">Vision of 성공비밀</p>
+    <div class="plan-section">
+        <h1>Elon's 1-Year Plan: From Earth to Stars</h1>
+        <p>Iterate or die. This is the blueprint—bold, no fluff. Click months to expand, edit inline, add/delete items, hit Save to persist. Own it—no excuses.</p>
+
+        <div class="month" onclick="toggleDetails(this)">
+            <h2>January: Kickoff Fundamentals</h2>
+            <div class="details">
+                <ul>
+                    <li contenteditable="true" class="editable">Review physics of Starship—optimize thrust-to-weight.</li>
+                    <li contenteditable="true" class="editable">Tesla: Ramp FSD beta to 1M vehicles.</li>
+                    <li contenteditable="true" class="editable">xAI: Train Grok on real-time data; aim for AGI safety checks.</li>
+                    <li contenteditable="true" class="editable">Personal: 80-hour weeks, no excuses.</li>
+                </ul>
+                <button class="action-btn" onclick="addItem(this.parentElement.querySelector('ul'))">Add Item</button>
+                <button class="action-btn" onclick="deleteItem(this.parentElement.querySelector('ul'))">Delete Selected</button>
+            </div>
+        </div>
+
+        <div class="month" onclick="toggleDetails(this)">
+            <h2>February: Energy Surge</h2>
+            <div class="details">
+                <ul>
+                    <li contenteditable="true" class="editable">SolarCity/Tesla Energy: Deploy 10GW solar + storage.</li>
+                    <li contenteditable="true" class="editable">Neuralink: First human trials for thought-to-text.</li>
+                    <li contenteditable="true" class="editable">Boring Co: Tunnel Vegas to LA—flamethrowers optional.</li>
+                    <li contenteditable="true" class="editable">Question assumptions: Why not Mars in 5 years?</li>
+                </ul>
+                <button class="action-btn" onclick="addItem(this.parentElement.querySelector('ul'))">Add Item</button>
+                <button class="action-btn" onclick="deleteItem(this.parentElement.querySelector('ul'))">Delete Selected</button>
+            </div>
+        </div>
+
+        <div class="month" onclick="toggleDetails(this)">
+            <h2>March: Launch Cadence</h2>
+            <div class="details">
+                <ul>
+                    <li contenteditable="true" class="editable">SpaceX: 10 Starlink launches; full constellation coverage.</li>
+                    <li contenteditable="true" class="editable">Tesla: Cybertruck production to 100k units.</li>
+                    <li contenteditable="true" class="editable">xAI: Debate AI risks publicly—call out the doomers.</li>
+                    <li contenteditable="true" class="editable">Humor injection: Tweet a meme about Dogecoin to Mars.</li>
+                </ul>
+                <button class="action-btn" onclick="addItem(this.parentElement.querySelector('ul'))">Add Item</button>
+                <button class="action-btn" onclick="deleteItem(this.parentElement.querySelector('ul'))">Delete Selected</button>
+            </div>
+        </div>
+
+        <div class="month" onclick="toggleDetails(this)">
+            <h2>April: Iterate Hard</h2>
+            <div class="details">
+                <ul>
+                    <li contenteditable="true" class="editable">Starship: Uncrewed Mars orbit test.</li>
+                    <li contenteditable="true" class="editable">Tesla: Robotaxi reveal—autonomy or bust.</li>
+                    <li contenteditable="true" class="editable">Neuralink: Link brains to Optimus bots.</li>
+                    <li contenteditable="true" class="editable">Work like hell: Prototype failures expected, learn fast.</li>
+                </ul>
+                <button class="action-btn" onclick="addItem(this.parentElement.querySelector('ul'))">Add Item</button>
+                <button class="action-btn" onclick="deleteItem(this.parentElement.querySelector('ul'))">Delete Selected</button>
+            </div>
+        </div>
+
+        <div class="month" onclick="toggleDetails(this)">
+            <h2>May: Scale Up</h2>
+            <div class="details">
+                <ul>
+                    <li contenteditable="true" class="editable">SpaceX: Crewed lunar flyby.</li>
+                    <li contenteditable="true" class="editable">Tesla: Gigafactory expansion—batteries for all.</li>
+                    <li contenteditable="true" class="editable">xAI: Grok integration with X—truth-seeking mode.</li>
+                    <li contenteditable="true" class="editable">Philosophy: Read Asimov, apply to AI ethics.</li>
+                </ul>
+                <button class="action-btn" onclick="addItem(this.parentElement.querySelector('ul'))">Add Item</button>
+                <button class="action-btn" onclick="deleteItem(this.parentElement.querySelector('ul'))">Delete Selected</button>
+            </div>
+        </div>
+
+        <div class="month" onclick="toggleDetails(this)">
+            <h2>June: Mid-Year Pivot</h2>
+            <div class="details">
+                <ul>
+                    <li contenteditable="true" class="editable">Assess progress: Cut what doesn't work, double down on wins.</li>
+                    <li contenteditable="true" class="editable">Tesla: Optimus in factories—humanoid labor revolution.</li>
+                    <li contenteditable="true" class="editable">Neuralink: Bandwidth upgrade for telepathy.</li>
+                    <li contenteditable="true" class="editable">Sarcasm: If we're not on Mars yet, why?</li>
+                </ul>
+                <button class="action-btn" onclick="addItem(this.parentElement.querySelector('ul'))">Add Item</button>
+                <button class="action-btn" onclick="deleteItem(this.parentElement.querySelector('ul'))">Delete Selected</button>
+            </div>
+        </div>
+
+        <div class="month" onclick="toggleDetails(this)">
+            <h2>July: Acceleration</h2>
+            <div class="details">
+                <ul>
+                    <li contenteditable="true" class="editable">SpaceX: Starship refueling demo in orbit.</li>
+                    <li contenteditable="true" class="editable">Tesla: Semi truck fleet deployment.</li>
+                    <li contenteditable="true" class="editable">xAI: Simulate existential risks—fix them.</li>
+                    <li contenteditable="true" class="editable">Action: Buy another company if it helps.</li>
+                </ul>
+                <button class="action-btn" onclick="addItem(this.parentElement.querySelector('ul'))">Add Item</button>
+                <button class="action-btn" onclick="deleteItem(this.parentElement.querySelector('ul'))">Delete Selected</button>
+            </div>
+        </div>
+
+        <div class="month" onclick="toggleDetails(this)">
+            <h2>August: Bold Risks</h2>
+            <div class="details">
+                <ul>
+                    <li contenteditable="true" class="editable">Neuralink: Public demo—control Tesla with mind.</li>
+                    <li contenteditable="true" class="editable">Boring Co: Hyperloop prototype run.</li>
+                    <li contenteditable="true" class="editable">SpaceX: Mars cargo mission planning.</li>
+                    <li contenteditable="true" class="editable">Honesty: Call out climate deniers with data.</li>
+                </ul>
+                <button class="action-btn" onclick="addItem(this.parentElement.querySelector('ul'))">Add Item</button>
+                <button class="action-btn" onclick="deleteItem(this.parentElement.querySelector('ul'))">Delete Selected</button>
+            </div>
+        </div>
+
+        <div class="month" onclick="toggleDetails(this)">
+            <h2>September: Execution Mode</h2>
+            <div class="details">
+                <ul>
+                    <li contenteditable="true" class="editable">Tesla: Full self-driving worldwide rollout.</li>
+                    <li contenteditable="true" class="editable">xAI: Grok 5 release—smarter than ever.</li>
+                    <li contenteditable="true" class="editable">Personal: Sleep less, achieve more.</li>
+                    <li contenteditable="true" class="editable">Wit: 420 funding secured for fun project.</li>
+                </ul>
+                <button class="action-btn" onclick="addItem(this.parentElement.querySelector('ul'))">Add Item</button>
+                <button class="action-btn" onclick="deleteItem(this.parentElement.querySelector('ul'))">Delete Selected</button>
+            </div>
+        </div>
+
+        <div class="month" onclick="toggleDetails(this)">
+            <h2>October: Push Boundaries</h2>
+            <div class="details">
+                <ul>
+                    <li contenteditable="true" class="editable">SpaceX: First crew to Mars orbit?</li>
+                    <li contenteditable="true" class="editable">Tesla: Energy independence for 1M homes.</li>
+                    <li contenteditable="true" class="editable">Neuralink: Merge with AI—safely.</li>
+                    <li contenteditable="true" class="editable">Curiosity: Dive into quantum computing tie-ins.</li>
+                </ul>
+                <button class="action-btn" onclick="addItem(this.parentElement.querySelector('ul'))">Add Item</button>
+                <button class="action-btn" onclick="deleteItem(this.parentElement.querySelector('ul'))">Delete Selected</button>
+            </div>
+        </div>
+
+        <div class="month" onclick="toggleDetails(this)">
+            <h2>November: Refine & Scale</h2>
+            <div class="details">
+                <ul>
+                    <li contenteditable="true" class="editable">All companies: Sustainability audits—zero waste goal.</li>
+                    <li contenteditable="true" class="editable">xAI: Open-source safe AI tools.</li>
+                    <li contenteditable="true" class="editable">Boring Co: Global tunneling network sketch.</li>
+                    <li contenteditable="true" class="editable">Iterate: Failures are data points.</li>
+                </ul>
+                <button class="action-btn" onclick="addItem(this.parentElement.querySelector('ul'))">Add Item</button>
+                <button class="action-btn" onclick="deleteItem(this.parentElement.querySelector('ul'))">Delete Selected</button>
+            </div>
+        </div>
+
+        <div class="month" onclick="toggleDetails(this)">
+            <h2>December: Year-End Thrust</h2>
+            <div class="details">
+                <ul>
+                    <li contenteditable="true" class="editable">SpaceX: Announce Mars city blueprint.</li>
+                    <li contenteditable="true" class="editable">Tesla: 10M vehicles on road milestone.</li>
+                    <li contenteditable="true" class="editable">Neuralink/xAI: Brain-AI symbiosis prototype.</li>
+                    <li contenteditable="true" class="editable">Reflection: What next? Multi-planetary by 2030.</li>
+                </ul>
+                <button class="action-btn" onclick="addItem(this.parentElement.querySelector('ul'))">Add Item</button>
+                <button class="action-btn" onclick="deleteItem(this.parentElement.querySelector('ul'))">Delete Selected</button>
+            </div>
+        </div>
+
+        <button class="save-btn" onclick="savePlan()">Save Changes</button>
+
+        <div class="plan-footer">Built by Musk Twin Mode. No committees, just code. Iterate if needed. 🤖</div>
     </div>
 </body>
-
 </html>
